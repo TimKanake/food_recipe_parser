@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import urllib2
 
-def scrapeRecipe(url='https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/'):
+def scrapeRecipe(url):
     document = urllib2.urlopen(url).read()
     soup = BeautifulSoup(document, "html.parser")
     links = soup.findAll('span')

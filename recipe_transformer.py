@@ -4,10 +4,10 @@ from scraper import scrapeRecipe
 
 measurement_strings = ["cup","pinch","can","tablespoon","teaspoon","clove","rack","pound","bottle","pinch"]
 
-def main():
+def parse_ingredients(url='https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/'):
     ingredients = []
     
-    r_ingredients, r_steps = scrapeRecipe()
+    r_ingredients, r_steps = scrapeRecipe(url)
     for ri in r_ingredients:
         descriptors = []
         split_words = ri.split(' ')
@@ -42,9 +42,9 @@ def main():
             name = name.split(',')[0]
         
         ingredients.append(Ingredient(name, quantity, measurement, [], preparation))
-                                      
-        print quantity, '|', measurement, '|', name, '|', preparation
 
-main()
+    return ingredients
+
+print parse_ingredients()
 
 
