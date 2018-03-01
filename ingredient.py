@@ -1,21 +1,5 @@
 class Ingredient:
-    def __init__(self, name = None):
-        self.name = name
-
-class Spice(Ingredient):
-    def _init_(self, name = None):
-        self.name = name
-
-class Vegetable(Ingredient):
-    def _init_(self, name = None):
-        self.name = name
-
-class Meat(Ingredient):
-    def __init__(self, name = None):
-        self.name = name
-
-class Liquid(Ingredient):
-    def __init__(self, name = None):
+    def __init__(self, name = None, quantity = None, measurement = None, description = None, preparation = None, nutrition = None):
         self.name = name
 
 
