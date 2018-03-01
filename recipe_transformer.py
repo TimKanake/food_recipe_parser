@@ -5,10 +5,8 @@ from scraper import scrapeRecipe
 measurement_strings = ["cup", "pinch", "can", "tablespoon", "teaspoon", "clove", "rack", "pound", "bottle", "pinch"]
 
 
-def parse_ingredients(url='https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/'):
+def parse_ingredients(r_ingredients):
     ingredients = []
-
-    r_ingredients, r_steps = scrapeRecipe(url)
     for ri in r_ingredients:
         descriptors = []
         split_words = ri.split(' ')
@@ -47,30 +45,30 @@ def parse_ingredients(url='https://www.allrecipes.com/recipe/25333/vegan-black-b
     return ingredients
 
 ###DAN AND ANDRE DO THIS
-def parse_steps(url='https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/'):
-    steps = []
-
-    return steps
-
-###DAN AND ANDRE DO THIS
-def parse_tools(url='https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/'):
+def parse_tools(r_steps):
     tools = []
 
     return tools
 
 ###DAN AND ANDRE DO THIS
-def parse_method():
+def parse_method(r_steps):
     method = []
 
     return method
 
-def make_recipe(url):
+def make_recipe(url="https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/"):
+    r_ingredients, r_steps, r_name = scrapeRecipe(url)
+    
+    ingredients = parse_ingredients(r_ingredients)
 
-    return Recipe
+    tools = parse_tools(r_steps)
 
-def main():
-    for ingredient in parse_ingredients():
-        print ingredient.get_ingredient_string()
+    method = parse_method(r_steps)
+
+    #nothing for method right now
+    r = Recipe(r_name, ingredients, r_steps, tools)
+
+    return r
 
 
 

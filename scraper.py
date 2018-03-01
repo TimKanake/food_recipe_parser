@@ -7,6 +7,7 @@ def scrapeRecipe(url):
     links = soup.findAll('span')
     raw_ingredients = []
     raw_directions = []
+    raw_title = ''
     for link in links:
         if link.get('itemprop') != None:
             if "ingredients" in link['itemprop']:
@@ -14,4 +15,10 @@ def scrapeRecipe(url):
         if link.get('class') != None:
             if "recipe-directions__list--item" in link['class']:
                 raw_directions.append(link.string)
-    return raw_ingredients, raw_directions
+    headers = soup.findAll('h1')
+    raw_title = ''
+    for h in headers:
+        if h.get('class') != None:
+            if "recipe-summary__h1" in h['class']:
+                raw_title = h.string
+    return raw_ingredients, raw_directions, raw_title
