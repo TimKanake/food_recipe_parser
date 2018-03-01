@@ -22,21 +22,21 @@ def parse_ingredients(url='https://www.allrecipes.com/recipe/25333/vegan-black-b
 
         counter = old
         halt = False
-        measurement = None
+        measurement = ""
         while counter < len(split_words) and not halt:
             for s in measurement_strings:
                 if s in split_words[counter].lower():
                     measurement = ' '.join(split_words[1:counter + 1])
                     halt = True
             counter += 1
-        if measurement != None and measurement[-1] == 's':
+        if measurement != "" and measurement[-1] == 's':
             measurement = measurement[:-1]
 
         if halt == False:
             counter = old
 
         name = ' '.join(split_words[counter:])
-        preparation = None
+        preparation = ""
 
         if ',' in name:
             preparation = name.split(',')[1]
@@ -46,6 +46,31 @@ def parse_ingredients(url='https://www.allrecipes.com/recipe/25333/vegan-black-b
 
     return ingredients
 
+###DAN AND ANDRE DO THIS
+def parse_steps(url='https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/'):
+    steps = []
 
-print parse_ingredients()
+    return steps
+
+###DAN AND ANDRE DO THIS
+def parse_tools(url='https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/'):
+    tools = []
+
+    return tools
+
+###DAN AND ANDRE DO THIS
+def parse_method():
+    method = []
+
+    return method
+
+def make_recipe(url):
+
+    return Recipe
+
+def main():
+    for ingredient in parse_ingredients():
+        print ingredient.get_ingredient_string()
+
+
 

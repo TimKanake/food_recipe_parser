@@ -24,12 +24,12 @@ vegan_substitutes['meat'] = 'beans'
 healthy_substiutes = {}
 
 unhealthy_ingredients = []
-unhealthy_ingredients.add("butter")
-unhealthy_ingredients.add("cheese")
-unhealthy_ingredients.add("sugar")
-unhealthy_ingredients.add("salt")
-unhealthy_ingredients.add("shorteing")
-unhealthy_ingredients.add("oil")
+unhealthy_ingredients.append("butter")
+unhealthy_ingredients.append("cheese")
+unhealthy_ingredients.append("sugar")
+unhealthy_ingredients.append("salt")
+unhealthy_ingredients.append("shorteing")
+unhealthy_ingredients.append("oil")
 
 unnecessary_ingredients = {}
 
@@ -66,6 +66,7 @@ class Recipe:
 
     #inputs: percent we want to reduce unhealthy ingredients (int)
     #outputs: new Recipe Object
+    ###TIM DOES THIS
     def make_healthy(self, percent_reduction = 0.5):
         healthy_recipe = copy.deepcopy(self)
 
@@ -76,6 +77,7 @@ class Recipe:
 
         return healthy_recipe
 
+    ###JIMMY DOES THIS
     def change_style(self, style):
         pass
 
@@ -88,6 +90,7 @@ class Recipe:
 
     #inputs: none
     #outputs: none
+    ###JIMMY DOES OUTPuTS
     def display_recipe(self):
         print "These are the ingredients you will need: "
         for ingredient in self.ingredients:
