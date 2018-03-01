@@ -52,7 +52,7 @@ def parse_tools(r_steps):
 
 ###DAN AND ANDRE DO THIS
 def parse_method(r_steps):
-    method = []
+    method = ''
 
     return method
 
@@ -66,9 +66,11 @@ def make_recipe(url="https://www.allrecipes.com/recipe/25333/vegan-black-bean-so
     method = parse_method(r_steps)
 
     #nothing for method right now
-    r = Recipe(r_name, ingredients, r_steps, tools)
+    r = Recipe(r_name, ingredients, r_steps, tools, method)
 
     return r
+
+print make_recipe()
 
 
 

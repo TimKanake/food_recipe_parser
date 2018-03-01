@@ -35,11 +35,12 @@ unnecessary_ingredients = {}
 
 
 class Recipe:
-    def __init__(self, name = None, ingredients = [], steps = [], tools = [], nutrition = None):
+    def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None):
         self.name = name
         self.ingredients = ingredients
         self.steps = steps
         self.tools = tools
+        self.method = method
         self.nutrition = nutrition
 
     #inputs: None
