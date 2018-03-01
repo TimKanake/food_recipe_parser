@@ -33,6 +33,11 @@ unhealthy_ingredients.append("oil")
 
 unnecessary_ingredients = {}
 
+def pretty_print_list(list_in):
+    str_out = "\n"
+    for x in list_in:
+        str_out += "\t" + str(x) + "\n"
+    return str_out
 
 class Recipe:
     def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None):
@@ -45,6 +50,13 @@ class Recipe:
 
     #inputs: None
     #outputs: new Recipe Object
+    def __str__(self):
+
+        ingredients_ppstring = pretty_print_list(self.ingredients)
+        steps_ppstring = pretty_print_list(self.steps)
+
+        return """Recipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, ingredients_ppstring, steps_ppstring, self.tools, self.method, self.nutrition)
+
     def make_vegan(self):
         swapped_ingredients = {} #Keep track of swapped ingredients for substitution in steps
         vegan_recipe = copy.deepcopy(self) #deep copy our recipe object

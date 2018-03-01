@@ -9,5 +9,5 @@ class Ingredient:
     def get_ingredient_string(self):
         return  self.quantity + " " + self.measurement + ", " + self.name + ", " + self.preparation
 
-
-
+    def __str__(self):
+    	return """{0} {1} {2} {3}""".format(self.quantity, self.measurement, self.name, self.preparation)
