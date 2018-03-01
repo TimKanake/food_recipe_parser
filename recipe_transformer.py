@@ -56,17 +56,29 @@ def parse_method(r_steps):
 
     return method
 
+# Take the scraped steps and split by periods
+def parse_steps(r_steps):
+    refined_steps = []
+    for x in r_steps:
+        if x is not None:
+            x = x.split(". ")
+            if "" in x: x.remove("")
+            refined_steps += x
+    return refined_steps
+
 def make_recipe(url="https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/"):
     r_ingredients, r_steps, r_name = scrapeRecipe(url)
-    
+
     ingredients = parse_ingredients(r_ingredients)
+
+    refined_steps = parse_steps(r_steps)
 
     tools = parse_tools(r_steps)
 
     method = parse_method(r_steps)
 
     #nothing for method right now
-    r = Recipe(r_name, ingredients, r_steps, tools, method)
+    r = Recipe(r_name, ingredients, refined_steps, tools, method)
 
     return r
 

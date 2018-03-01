@@ -36,7 +36,7 @@ unnecessary_ingredients = {}
 def pretty_print_list(list_in):
     str_out = "\n"
     for x in list_in:
-        str_out += "\t" + str(x) + "\n"
+        str_out += str(x) + "\n"
     return str_out
 
 class Recipe:
