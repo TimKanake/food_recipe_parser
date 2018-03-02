@@ -1,28 +1,29 @@
 from ingredient import Ingredient
 from recipe import Recipe
-from scraper import scrapeRecipe, scrapeTools, scrapeMethods
+from scraper import scrapeRecipe, scrapeTools, scrapeMethods, scrapeMeasurements
 import operator
 
-measurement_strings = ["cup", "pinch", "can", "tablespoon", "teaspoon", "clove", "rack", "pound", "bottle", "pinch"]
-
+#takes list of raw ingredients and returns list of Ingredient objects
 def parse_ingredients(r_ingredients):
     ingredients = []
+    measurements = scrapeMeasurements()
     for ri in r_ingredients:
         descriptors = []
         split_words = ri.split(' ')
+        #quantity
         if split_words[0][0].isnumeric():
             quantity = split_words[0]
             old = 1
         else:
-            # this handles when there is no number at the start of an ungredient
             quantity = 1
             old = 0
 
+        #measurement
         counter = old
         halt = False
         measurement = ""
         while counter < len(split_words) and not halt:
-            for s in measurement_strings:
+            for s in measurements:
                 if s in split_words[counter].lower():
                     measurement = ' '.join(split_words[1:counter + 1])
                     halt = True
@@ -30,32 +31,30 @@ def parse_ingredients(r_ingredients):
         if measurement != "" and measurement[-1] == 's':
             measurement = measurement[:-1]
 
+        #name
         if halt == False:
             counter = old
-
         name = ' '.join(split_words[counter:])
-        preparation = ""
 
+        #preparation
+        preparation = ""
         if ',' in name:
             preparation = name.split(',')[1]
             name = name.split(',')[0]
-
         ingredients.append(Ingredient(name, quantity, measurement, [], preparation))
-
     return ingredients
 
 ###DAN AND ANDRE DO THIS
 def parse_tools(r_steps):
     tools = scrapeTools()
     used_tools = {}
-    maxtool = ''
-    maxx = -1
     exc = {}
     exc['knife'] = ['carve','cut','slice','chop','dice','mince']
     exc['thermometer'] = ['temperature','degrees']
     exc['spoon'] = ['stir']
 ##    exc['tongs'] = ['turn']
     for step in r_steps:
+        #check for tools
         for tool in tools:
             if tool in step.lower():
                 if tool in used_tools:
@@ -65,6 +64,7 @@ def parse_tools(r_steps):
                 if used_tools[tool] > maxx:
                     maxx = used_tools[tool]
                     maxtool = tool
+        #check for words that are indicative of certain tools
         for t in exc:
             for word in exc[t]:
                 if word in step.lower():
@@ -72,9 +72,6 @@ def parse_tools(r_steps):
                         used_tools[t] += 1
                     else:
                         used_tools[t] = 1
-                    if used_tools[t] > maxx:
-                        maxx = used_tools[t]
-                        maxtool = t
                     
     sorted_tools = sorted(used_tools.items(), key = operator.itemgetter(1))
     sorted_tools.reverse()
@@ -86,18 +83,13 @@ def parse_tools(r_steps):
 def parse_method(r_steps):
     methods = scrapeMethods()
     method_frequency = {}
-    maxx = -1
-    maxmethod = ''
-    for method in methods:
-        for step in r_steps:
+    for step in r_steps:
+        for method in methods:
             if method in step.lower():
                 if method in method_frequency:
                     method_frequency[method] += 1
                 else:
                     method_frequency[method] = 1
-                if method_frequency[method] > maxx:
-                    maxx = method_frequency[method]
-                    maxmethod = method
                     
     sorted_methods = sorted(method_frequency.items(), key = operator.itemgetter(1))
     sorted_methods.reverse()
@@ -116,18 +108,15 @@ def parse_steps(r_steps):
             refined_steps.append(s)
     return refined_steps
 
+#given a url to an allrecipes page, will return Recipe object
 def make_recipe(url):
     r_ingredients, r_steps, r_name = scrapeRecipe(url)
 
     ingredients = parse_ingredients(r_ingredients)
-
     refined_steps = parse_steps(r_steps)
-
     tools = parse_tools(r_steps)
-
     method = parse_method(r_steps)
 
-    #nothing for method right now
     r = Recipe(r_name, ingredients, refined_steps, tools, method)
 
     return r
