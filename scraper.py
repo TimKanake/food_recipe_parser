@@ -29,7 +29,7 @@ def scrapeTools():
     document = urllib2.urlopen(url).read()
     soup = BeautifulSoup(document, "html.parser")
     headers = soup.findAll('th')
-    strings = ['knife', 'food processor', 'saute pan']
+    strings = ['knife','food processor','saute pan','stock pot','brush','roasting rack','roasting pan','pot','pan']
     for h in headers:
         if h.get('scope') == "row" and (h.get('class') == None or "navbox-group" not in h.get('class')):
             s = h.string

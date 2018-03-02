@@ -47,11 +47,36 @@ def parse_ingredients(r_ingredients):
 ###DAN AND ANDRE DO THIS
 def parse_tools(r_steps):
     tools = scrapeTools()
-    used_tools = []
+    used_tools = {}
+    maxtool = ''
+    maxx = -1
+    exc = {}
+    exc['knife'] = ['carve','cut','slice','chop','dice','mince']
+    exc['thermometer'] = ['temperature','degrees']
     for tool in tools:
         for step in r_steps:
-            if tool in step:
-                used_tools.append(tool)
+            if tool in step.lower():
+                if tool in used_tools:
+                    used_tools[tool] += 1
+                else:
+                    used_tools[tool] = 1
+                if used_tools[tool] > maxx:
+                    maxx = used_tools[tool]
+                    maxtool = tool
+            for t in exc:
+                for word in exc[t]:
+                    if word in step.lower():
+                        if tool in used_tools:
+                            used_tools[t] += 1
+                        else:
+                            used_tools[t] = 1
+                        if used_tools[t] > maxx:
+                            maxx = used_tools[t]
+                            maxtool = t
+                    
+    sorted_tools = sorted(used_tools.items(), key = operator.itemgetter(1))
+    sorted_tools.reverse()
+    return sorted_tools
                 
     return used_tools
 
@@ -63,7 +88,7 @@ def parse_method(r_steps):
     maxmethod = ''
     for method in methods:
         for step in r_steps:
-            if method in step:
+            if method in step.lower():
                 if method in method_frequency:
                     method_frequency[method] += 1
                 else:
@@ -89,7 +114,7 @@ def parse_steps(r_steps):
             refined_steps.append(s)
     return refined_steps
 
-def make_recipe(url="https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/"):
+def make_recipe(url="https://www.allrecipes.com/recipe/43655/perfect-turkey/"):
     r_ingredients, r_steps, r_name = scrapeRecipe(url)
 
     ingredients = parse_ingredients(r_ingredients)

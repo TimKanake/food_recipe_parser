@@ -55,7 +55,19 @@ class Recipe:
         ingredients_ppstring = pretty_print_list(self.ingredients)
         steps_ppstring = pretty_print_list(self.steps)
 
-        return """Recipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, ingredients_ppstring, steps_ppstring, self.tools, self.method, self.nutrition)
+        if len(self.method) > 0:
+            p_method = self.method[0][0]
+        if len(self.method) > 1:
+            p_method += ', ' + self.method[1][0]
+
+        if len(self.tools) > 0:
+            p_tools = self.tools[0][0]
+            if len(self.tools) > 1:
+                for tool in self.tools[1:]:
+                    if tool[0] not in p_tools:
+                        p_tools += ', ' + tool[0]
+
+        return """Recipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, ingredients_ppstring, steps_ppstring, p_tools, p_method, self.nutrition)
 
     def make_vegan(self):
         swapped_ingredients = {} #Keep track of swapped ingredients for substitution in steps
