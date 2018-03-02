@@ -55,8 +55,8 @@ def parse_tools(r_steps):
     exc['thermometer'] = ['temperature','degrees']
     exc['spoon'] = ['stir']
 ##    exc['tongs'] = ['turn']
-    for tool in tools:
-        for step in r_steps:
+    for step in r_steps:
+        for tool in tools:
             if tool in step.lower():
                 if tool in used_tools:
                     used_tools[tool] += 1
@@ -65,16 +65,16 @@ def parse_tools(r_steps):
                 if used_tools[tool] > maxx:
                     maxx = used_tools[tool]
                     maxtool = tool
-            for t in exc:
-                for word in exc[t]:
-                    if word in step.lower():
-                        if tool in used_tools:
-                            used_tools[t] += 1
-                        else:
-                            used_tools[t] = 1
-                        if used_tools[t] > maxx:
-                            maxx = used_tools[t]
-                            maxtool = t
+        for t in exc:
+            for word in exc[t]:
+                if word in step.lower():
+                    if tool in used_tools:
+                        used_tools[t] += 1
+                    else:
+                        used_tools[t] = 1
+                    if used_tools[t] > maxx:
+                        maxx = used_tools[t]
+                        maxtool = t
                     
     sorted_tools = sorted(used_tools.items(), key = operator.itemgetter(1))
     sorted_tools.reverse()
