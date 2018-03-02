@@ -1,9 +1,9 @@
 from ingredient import Ingredient
 from recipe import Recipe
-from scraper import scrapeRecipe
+from scraper import scrapeRecipe, scrapeTools, scrapeMethods
+import operator
 
 measurement_strings = ["cup", "pinch", "can", "tablespoon", "teaspoon", "clove", "rack", "pound", "bottle", "pinch"]
-
 
 def parse_ingredients(r_ingredients):
     ingredients = []
@@ -46,24 +46,47 @@ def parse_ingredients(r_ingredients):
 
 ###DAN AND ANDRE DO THIS
 def parse_tools(r_steps):
-    tools = []
-
-    return tools
+    tools = scrapeTools()
+    used_tools = []
+    for tool in tools:
+        for step in r_steps:
+            if tool in step:
+                used_tools.append(tool)
+                
+    return used_tools
 
 ###DAN AND ANDRE DO THIS
 def parse_method(r_steps):
-    method = ''
-
-    return method
+    methods = scrapeMethods()
+    method_frequency = {}
+    maxx = -1
+    maxmethod = ''
+    for method in methods:
+        for step in r_steps:
+            if method in step:
+                if method in method_frequency:
+                    method_frequency[method] += 1
+                else:
+                    method_frequency[method] = 1
+                if method_frequency[method] > maxx:
+                    maxx = method_frequency[method]
+                    maxmethod = method
+                    
+    sorted_methods = sorted(method_frequency.items(), key = operator.itemgetter(1))
+    sorted_methods.reverse()
+    return sorted_methods
 
 # Take the scraped steps and split by periods
 def parse_steps(r_steps):
     refined_steps = []
     for x in r_steps:
-        if x is not None:
-            x = x.split(". ")
-            if "" in x: x.remove("")
-            refined_steps += x
+        x = x.split(".")
+        if "" in x: x.remove("")
+        for step in x:
+            s = step
+            if s[0] == ' ':
+                s = s[1:]
+            refined_steps.append(s)
     return refined_steps
 
 def make_recipe(url="https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/"):
