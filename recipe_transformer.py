@@ -61,9 +61,6 @@ def parse_tools(r_steps):
                     used_tools[tool] += 1
                 else:
                     used_tools[tool] = 1
-                if used_tools[tool] > maxx:
-                    maxx = used_tools[tool]
-                    maxtool = tool
         #check for words that are indicative of certain tools
         for t in exc:
             for word in exc[t]:
