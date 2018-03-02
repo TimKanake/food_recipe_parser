@@ -67,7 +67,7 @@ class Recipe:
                     if tool[0] not in p_tools:
                         p_tools += ', ' + tool[0]
 
-        return """Recipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, ingredients_ppstring, steps_ppstring, p_tools, p_method, self.nutrition)
+        return """\n\nRecipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, ingredients_ppstring, steps_ppstring, p_tools, p_method, self.nutrition)
 
     def make_vegan(self):
         swapped_ingredients = {} #Keep track of swapped ingredients for substitution in steps

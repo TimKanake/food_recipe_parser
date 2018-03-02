@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import urllib2
 
+#returns raw ingredients, steps, and recipe name from URL
 def scrapeRecipe(url):
     document = urllib2.urlopen(url).read()
     soup = BeautifulSoup(document, "html.parser")
@@ -24,12 +25,13 @@ def scrapeRecipe(url):
                 raw_title = h.string
     return raw_ingredients, raw_directions, raw_title
 
+#returns a pretty good list of tools that Andre and I compiled from websites and hardcoding
 def scrapeTools():
     url = "https://en.wikipedia.org/wiki/List_of_food_preparation_utensils"
     document = urllib2.urlopen(url).read()
     soup = BeautifulSoup(document, "html.parser")
     headers = soup.findAll('th')
-    strings = ['knife','food processor','saute pan','stock pot','brush','roasting rack','roasting pan','pot','pan']
+    strings = ['knife','food processor','saute pan','stock pot','brush','roasting rack','roasting pan','pot','pan','slow cooker','fork','spoon','skillet','whisk']
     for h in headers:
         if h.get('scope') == "row" and (h.get('class') == None or "navbox-group" not in h.get('class')):
             s = h.string
@@ -51,6 +53,7 @@ def scrapeTools():
     
     return strings
 
+#returns a pretty good list of cooking methods, hardcoded completely for now
 def scrapeMethods():
     methods = ["bake","fry","broil","boil","saute","grill","roast","steam","simmer","poach","pressure cook","barbecue","smoke","sear","braise","char","cure","glaze","stir fry"]
     return methods
