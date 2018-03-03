@@ -194,4 +194,4 @@ def test2_get_steps(url):
     for step in list_of_steps:
         print step
 
-test2_get_steps("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
+#test2_get_steps("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
