@@ -24,13 +24,19 @@ def parse_ingredients(r_ingredients):
         #measurement
         counter = old
         halt = False
+        last = False
         measurement = ""
         while counter < len(split_words) and not halt:
+            thiswordm = False
             for s in measurements:
                 if s in split_words[counter].lower():
-                    measurement = ' '.join(split_words[1:counter + 1])
-                    halt = True
-            counter += 1
+                    last = True
+                    thiswordm = True
+            if not thiswordm and last:
+                measurement = ' '.join(split_words[old:counter])
+                halt = True
+            else:
+                counter += 1
         if measurement != "" and measurement[-1] == 's':
             measurement = measurement[:-1]
 
