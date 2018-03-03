@@ -51,9 +51,9 @@ class Recipe:
     #outputs: new Recipe Object
     ###TIM DOES THIS
     def make_healthy(self):
-        choice = input('Choose one of the following options to make your recipe healthier: (1) Substitute unhealthy\
-         ingredients with healthier ingredients, (2) Reduce amount of secondary unhealthy ingredients, (3)\
-          Change cooking method. Enter your choice by pressing 1, 2 or 3:  ')
+        choice = input('Choose one of the following options to make your recipe healthier: (1) Substitute unhealthy'
+         'ingredients with healthier ingredients, (2) Reduce amount of secondary unhealthy ingredients, (3)'\
+          'Change cooking method. Enter your choice by pressing 1, 2 or 3:  ')
 
         healthy_recipe = copy.deepcopy(self)
         if choice == 3:
@@ -74,7 +74,7 @@ class Recipe:
                             reduced_ingredients[ingredient] = [ingredient, True, reduction_substitutes[j].ratio]
 
             if len(reduced_ingredients) == 0:
-                print 'There are no secondary ingredients to reduce, making recipe healthier by substituting'\ 
+                print 'There are no secondary ingredients to reduce, making recipe healthier by substituting' \
                       ' unhealthy ingredients'
                 pass
             else:
