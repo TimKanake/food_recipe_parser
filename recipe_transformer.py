@@ -170,9 +170,10 @@ def parse_steps2(steps, ingredients, tools, methods):
             for x in range(len(s_steps)):
                 if word in s_steps[x]:
                     if s_steps[x-1].isdigit() or s_steps[x-1] in "an":
-                        steps_obj.times = s_steps[x-1] + " " + s_steps[x]
-                        if steps_obj.times[-1] in ".,":
-                            steps_obj.times = steps_obj.times[:-1]
+                        #if steps_obj.times[-1] in ".,":
+                        #   steps_obj.times = steps_obj.times[:-1]
+                        steps_obj.times.append(s_steps[x-1] + " " + s_steps[x])
+
         if steps_obj.times == []:
             steps_obj.times = ""
 
@@ -213,3 +214,4 @@ def test2_get_steps(url):
 
 #test2_get_steps("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
 print make_recipe("https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/")
+test1()

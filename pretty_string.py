@@ -35,6 +35,18 @@ def horz_list_to_str(list_in, list_name=None):
             str_out += x + ", "
         str_out = str_out[:-1]
         return str_out
+    elif list_name == "times":
+        minutes = []
+        for x in list_in:
+            x_split = x.split(" ")
+            if "minute" in x_split[1]:
+                if not x_split[0].isdigit():
+                    minutes.append(1)
+                else:
+                    minutes.append(int(x[0]))
+        total = sum(minutes)
+        return str(total) + " minutes"
+
 
 def pretty_string(list_in, list_name, direction):
     if direction is "horizontal":
