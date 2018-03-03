@@ -1,5 +1,6 @@
 import copy
 from ingredient import Ingredient
+from pretty_string import pretty_string
 
 # define vegan substitutes for non-vegan ingredients
 # reference source is http://www.vegkitchen.com/tips/vegan-substitutions/
@@ -33,12 +34,6 @@ unhealthy_ingredients.append("oil")
 
 unnecessary_ingredients = {}
 
-def pretty_print_list(list_in):
-    str_out = "\n"
-    for x in list_in:
-        str_out += str(x) + "\n"
-    return str_out
-
 class Recipe:
     def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None):
         self.name = name
@@ -52,22 +47,12 @@ class Recipe:
     #outputs: new Recipe Object
     def __str__(self):
 
-        ingredients_ppstring = pretty_print_list(self.ingredients)
-        steps_ppstring = pretty_print_list(self.steps)
+        p_ingredients = pretty_string(self.ingredients, "ingredients")
+        p_steps = pretty_string(self.steps, "steps")
+        p_method = pretty_string(self.method, "methods")
+        p_tools = pretty_string(self.tools, "tools")
 
-        if len(self.method) > 0:
-            p_method = self.method[0][0]
-        if len(self.method) > 1:
-            p_method += ', ' + self.method[1][0]
-
-        if len(self.tools) > 0:
-            p_tools = self.tools[0][0]
-            if len(self.tools) > 1:
-                for tool in self.tools[1:]:
-                    if tool[0] not in p_tools:
-                        p_tools += ', ' + tool[0]
-
-        return """\n\nRecipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, ingredients_ppstring, steps_ppstring, p_tools, p_method, self.nutrition)
+        return """\n\nRecipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, p_ingredients, p_steps, p_tools, p_method, self.nutrition)
 
     def make_vegan(self):
         swapped_ingredients = {} #Keep track of swapped ingredients for substitution in steps

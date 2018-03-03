@@ -50,7 +50,7 @@ def scrapeTools():
 
     for h in headers:
         strings.append(h.string.lower())
-    
+
     return strings
 
 #returns a pretty good list of cooking methods, hardcoded completely for now
@@ -62,4 +62,4 @@ def scrapeMethods():
 def scrapeMeasurements():
     measurements = ["cup","can","tablespoon","teaspoon","clove","rack","pound","bottle","pinch","ounce","oz.","dash","pint","quart","gallon","kilogram","gram","milliliter","liter","stick","peck","jigger"]
     return measurements
-    
+

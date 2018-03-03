@@ -69,11 +69,11 @@ def parse_tools(r_steps):
                         used_tools[t] += 1
                     else:
                         used_tools[t] = 1
-                    
+
     sorted_tools = sorted(used_tools.items(), key = operator.itemgetter(1))
     sorted_tools.reverse()
     return sorted_tools
-                
+
     return used_tools
 
 ###DAN AND ANDRE DO THIS
@@ -87,7 +87,7 @@ def parse_method(r_steps):
                     method_frequency[method] += 1
                 else:
                     method_frequency[method] = 1
-                    
+
     sorted_methods = sorted(method_frequency.items(), key = operator.itemgetter(1))
     sorted_methods.reverse()
     return sorted_methods
@@ -124,6 +124,5 @@ def test1():
     print make_recipe("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
     print make_recipe("https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/")
     print make_recipe("https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/")
-
 
 
