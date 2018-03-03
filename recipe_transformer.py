@@ -119,10 +119,12 @@ def parse_steps2(steps, ingredients, tools, methods):
 
     # For each step...
     for step in steps:
+        steps_obj = Step(number=count, ingredients = [], tools = [], methods = [], times = [], original_document=step + ".")
         step = step.lower()
-        # Check which ingredients, tools, methods in the recipe are used.
-        steps_obj = Step(number=count, ingredients = [], tools = [], methods = [], times = [], original_document=step)
+        step = step[:-1]
         count +=1
+
+        # Ingredients
         for i in ingredients:
             if i.name in step:
                 steps_obj.ingredients.append(i.name)
@@ -131,16 +133,19 @@ def parse_steps2(steps, ingredients, tools, methods):
                     if x in step:
                         steps_obj.ingredients.append(x)
         steps_obj.ingredients = list(OrderedDict.fromkeys(steps_obj.ingredients))
+        # Tools
         for t in tools:
             if t[0] in step:
                 steps_obj.tools.append(t)
         steps_obj.tools = list(OrderedDict.fromkeys(steps_obj.tools))
+
+        # Methods
         for m in methods:
             if m[0] in step:
                 steps_obj.methods.append(m)
         steps_obj.methods = list(OrderedDict.fromkeys(steps_obj.methods))
 
-        # Then parse the step for numbers, time-related words like "5 minutes" TO DO
+        # Times
         s_steps = step.split(" ")
         time_words = scrapeTimeMeasuements()
         for word in time_words:
@@ -149,6 +154,10 @@ def parse_steps2(steps, ingredients, tools, methods):
                     print s_steps[x-1:x+1]
                     if s_steps[x-1].isdigit() or s_steps[x-1] in "an":
                         steps_obj.times = s_steps[x-1] + " " + s_steps[x]
+                        if steps_obj.times[-1] in ".,":
+                            steps_obj.times = steps_obj.times[:-1]
+        if steps_obj.times == []:
+            steps_obj.times = ""
 
 
         list_out.append(steps_obj)
@@ -177,10 +186,12 @@ def test1():
     print make_recipe("https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/")
 
 # Test out parsing steps into what ingredients, tools, methods, and time is needed
-def test2():
-    r = make_recipe("https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/")
+def test2_get_steps(url):
+    r = make_recipe(url)
     print r
     list_of_steps = parse_steps2(r.steps, r.ingredients, r.tools, r.method)
     print "List of Steps:\n"
     for step in list_of_steps:
         print step
+
+test2_get_steps("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")

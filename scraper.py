@@ -31,7 +31,7 @@ def scrapeTools():
     document = urllib2.urlopen(url).read()
     soup = BeautifulSoup(document, "html.parser")
     headers = soup.findAll('th')
-    strings = ['knife','food processor','saute pan','stock pot','brush','roasting rack','roasting pan','pot','pan','slow cooker','fork','spoon','skillet','whisk']
+    strings = ['knife','food processor','saute pan','stock pot','brush','roasting rack','roasting pan','pot','pan','slow cooker','fork','spoon','skillet','whisk', "oven"]
     for h in headers:
         if h.get('scope') == "row" and (h.get('class') == None or "navbox-group" not in h.get('class')):
             s = h.string
@@ -55,7 +55,7 @@ def scrapeTools():
 
 #returns a pretty good list of cooking methods, hardcoded completely for now
 def scrapeMethods():
-    methods = ["bake","fry","broil","boil","saute","grill","roast","steam","simmer","poach","pressure cook","barbecue","smoke","sear","braise","char","cure","glaze","stir fry", "season", "heat", "stir"]
+    methods = ["bake","fry","broil","boil","saute","grill","roast","steam","simmer","poach","pressure cook","barbecue","smoke","sear","braise","char","cure","glaze","stir fry", "season", "heat", "stir", "preheat"]
     return methods
 
 #returns a pretty good list of cooking measurements, hardcoded completely for now
