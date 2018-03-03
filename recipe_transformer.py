@@ -15,7 +15,8 @@ def parse_ingredients(r_ingredients):
         descriptors = []
         split_words = ri.split(' ')
         for word in remove_words:
-            split_words.remove(word)
+            if word in split_words:
+                split_words.remove(word)
         #quantity
         if split_words[0][0].isnumeric():
             quantity = split_words[0]
