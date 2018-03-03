@@ -123,10 +123,11 @@ def parse_steps(r_steps):
 # By A) Checking in which steps are the ingredients, tools, methods in the recipe used.
 # and B) Checking for numbers and time-related words like "minutes" "hours" "seconds"
 def parse_steps2(steps, ingredients, tools, methods):
-    print "parse_steps2\n"
     count = 0
     list_out = [] # List to hold the Step objects created from each step
 
+    last_method = None
+    ambiguous_terms = ["cook"]
     # For each step...
     for step in steps:
         steps_obj = Step(number=count, ingredients = [], tools = [], methods = [], times = [], original_document=step + ".")
@@ -143,6 +144,7 @@ def parse_steps2(steps, ingredients, tools, methods):
                     if x in step:
                         steps_obj.ingredients.append(x)
         steps_obj.ingredients = list(OrderedDict.fromkeys(steps_obj.ingredients))
+
         # Tools
         for t in tools:
             if t[0] in step:
@@ -152,7 +154,13 @@ def parse_steps2(steps, ingredients, tools, methods):
         # Methods
         for m in methods:
             if m[0] in step:
+                last_method = m
                 steps_obj.methods.append(m)
+
+        for x in ambiguous_terms:
+            if x in step and last_method is not None:
+                steps_obj.methods.append(last_method)
+
         steps_obj.methods = list(OrderedDict.fromkeys(steps_obj.methods))
 
         # Times
@@ -161,7 +169,6 @@ def parse_steps2(steps, ingredients, tools, methods):
         for word in time_words:
             for x in range(len(s_steps)):
                 if word in s_steps[x]:
-                    print s_steps[x-1:x+1]
                     if s_steps[x-1].isdigit() or s_steps[x-1] in "an":
                         steps_obj.times = s_steps[x-1] + " " + s_steps[x]
                         if steps_obj.times[-1] in ".,":
@@ -181,8 +188,8 @@ def make_recipe(url):
     refined_steps = parse_steps(r_steps)
     tools = parse_tools(r_steps)
     method = parse_method(r_steps)
-
-    r = Recipe(r_name, ingredients, refined_steps, tools, method)
+    step_objs = parse_steps2(refined_steps, ingredients, tools, method)
+    r = Recipe(r_name, ingredients, step_objs, tools, method)
 
     return r
 
@@ -205,3 +212,4 @@ def test2_get_steps(url):
         print step
 
 #test2_get_steps("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
+print make_recipe("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")

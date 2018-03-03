@@ -55,7 +55,7 @@ def scrapeTools():
 
 #returns a pretty good list of cooking methods, hardcoded completely for now
 def scrapeMethods():
-    methods = ["bake","fry","broil","boil","saute","grill","roast","steam","simmer","poach","pressure cook","barbecue","smoke","sear","braise","char","cure","glaze","stir fry", "season", "heat", "stir", "preheat"]
+    methods = ["bake","fry","broil","boil","saute","grill","roast","steam","simmer","poach","pressure cook","barbecue","smoke","sear","braise","char","cure","glaze","stir fry", "season", "heat", "stir", "preheat", "slow cook"]
     return methods
 
 #returns a pretty good list of cooking measurements, hardcoded completely for now
