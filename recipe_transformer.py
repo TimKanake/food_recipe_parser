@@ -1,8 +1,9 @@
 from ingredient import Ingredient
 from recipe import Recipe
-from scraper import scrapeRecipe, scrapeTools, scrapeMethods, scrapeMeasurements
+from scraper import scrapeRecipe, scrapeTools, scrapeMethods, scrapeMeasurements, scrapeTimeMeasuements
 from steps import Step
 import operator
+from collections import OrderedDict
 
 
 #takes list of raw ingredients and returns list of Ingredient objects
@@ -109,24 +110,47 @@ def parse_steps(r_steps):
 
 
 # (optional) Parse the directions into a series of steps that each consist of ingredients, tools, methods, and times
+# By A) Checking in which steps are the ingredients, tools, methods in the recipe used.
+# and B) Checking for numbers and time-related words like "minutes" "hours" "seconds"
 def parse_steps2(steps, ingredients, tools, methods):
     print "parse_steps2\n"
     count = 0
-    list_out = []
+    list_out = [] # List to hold the Step objects created from each step
+
+    # For each step...
     for step in steps:
-        steps_obj = Step(number=count, original_document=step)
-        #steps_obj.number = count
+        step = step.lower()
+        # Check which ingredients, tools, methods in the recipe are used.
+        steps_obj = Step(number=count, ingredients = [], tools = [], methods = [], times = [], original_document=step)
         count +=1
         for i in ingredients:
             if i.name in step:
                 steps_obj.ingredients.append(i.name)
+            else:
+                for x in i.name.split(" "):
+                    if x in step:
+                        steps_obj.ingredients.append(x)
+        steps_obj.ingredients = list(OrderedDict.fromkeys(steps_obj.ingredients))
         for t in tools:
             if t[0] in step:
                 steps_obj.tools.append(t)
+        steps_obj.tools = list(OrderedDict.fromkeys(steps_obj.tools))
         for m in methods:
             if m[0] in step:
                 steps_obj.methods.append(m)
-        print steps_obj
+        steps_obj.methods = list(OrderedDict.fromkeys(steps_obj.methods))
+
+        # Then parse the step for numbers, time-related words like "5 minutes" TO DO
+        s_steps = step.split(" ")
+        time_words = scrapeTimeMeasuements()
+        for word in time_words:
+            for x in range(len(s_steps)):
+                if word in s_steps[x]:
+                    print s_steps[x-1:x+1]
+                    if s_steps[x-1].isdigit() or s_steps[x-1] in "an":
+                        steps_obj.times = s_steps[x-1] + " " + s_steps[x]
+
+
         list_out.append(steps_obj)
     return list_out
 
@@ -160,4 +184,3 @@ def test2():
     print "List of Steps:\n"
     for step in list_of_steps:
         print step
-test2()

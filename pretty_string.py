@@ -14,7 +14,7 @@ def vertical_list_to_str(list_in, list_name):
     return str_out
 
 def horz_list_to_str(list_in, list_name=None):
-    str_out = None
+    str_out = ""
     if list_name == "methods":
         if len(list_in) > 0:
             str_out = list_in[0][0]
@@ -29,11 +29,16 @@ def horz_list_to_str(list_in, list_name=None):
                     if tool[0] not in str_out:
                         str_out += ', ' + tool[0]
         return str_out
+    elif list_name == "ingredients":
+        for x in list_in:
+            str_out += x + ", "
+        str_out = str_out[:-1]
+        return str_out
 
-def pretty_string(list_in, list_name):
-    if list_name in ["methods", "tools"]:
+def pretty_string(list_in, list_name, direction):
+    if direction is "horizontal":
         return horz_list_to_str(list_in, list_name)
-    elif list_name in ["ingredients", "steps"]:
+    elif direction in "vertical":
         return vertical_list_to_str(list_in, list_name)
     else:
-        return "Error: PP.pretty_string given invalid list_name arg: " + str(list_name)
+        return "Error: PP.pretty_string given invalid direction arg: " + str(list_name) + ". Should be 'horizontal' or 'vertical'"

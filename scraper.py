@@ -55,11 +55,14 @@ def scrapeTools():
 
 #returns a pretty good list of cooking methods, hardcoded completely for now
 def scrapeMethods():
-    methods = ["bake","fry","broil","boil","saute","grill","roast","steam","simmer","poach","pressure cook","barbecue","smoke","sear","braise","char","cure","glaze","stir fry"]
+    methods = ["bake","fry","broil","boil","saute","grill","roast","steam","simmer","poach","pressure cook","barbecue","smoke","sear","braise","char","cure","glaze","stir fry", "season", "heat", "stir"]
     return methods
 
 #returns a pretty good list of cooking measurements, hardcoded completely for now
 def scrapeMeasurements():
     measurements = ["cup","can","tablespoon","teaspoon","clove","rack","pound","bottle","pinch","ounce","oz.","dash","pint","quart","gallon","kilogram","gram","milliliter","liter","stick","peck","jigger"]
     return measurements
+
+def scrapeTimeMeasuements():
+    return ["minute", "hour", "second", "jiffy", "moment", "nanosecond"]
 

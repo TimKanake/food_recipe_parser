@@ -47,10 +47,10 @@ class Recipe:
     #outputs: new Recipe Object
     def __str__(self):
 
-        p_ingredients = pretty_string(self.ingredients, "ingredients")
-        p_steps = pretty_string(self.steps, "steps")
-        p_method = pretty_string(self.method, "methods")
-        p_tools = pretty_string(self.tools, "tools")
+        p_ingredients = pretty_string(self.ingredients, "ingredients", "vertical")
+        p_steps = pretty_string(self.steps, "steps", "vertical")
+        p_method = pretty_string(self.method, "methods", "horizontal")
+        p_tools = pretty_string(self.tools, "tools", "horizontal")
 
         return """\n\nRecipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, p_ingredients, p_steps, p_tools, p_method, self.nutrition)
 
