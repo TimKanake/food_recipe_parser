@@ -2,7 +2,7 @@ import copy
 import random
 from ingredient import Ingredient
 from ingredient_substitutes import vegan_substitutes, healthy_substitutes, unhealthy_ingredients, reduction_substitutes\
-    , fix_step
+    , fix_step, non_vegan_substitutes
 def pretty_print_list(list_in):
     str_out = "\n"
     for x in list_in:
@@ -10,13 +10,14 @@ def pretty_print_list(list_in):
     return str_out
 
 class Recipe:
-    def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None):
+    def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None, is_vegan = False):
         self.name = name
         self.ingredients = ingredients
         self.steps = steps
         self.tools = tools
         self.method = method
         self.nutrition = nutrition
+        self.is_vegan = is_vegan
 
     #inputs: None
     #outputs: new Recipe Object
@@ -27,7 +28,12 @@ class Recipe:
 
         return """Recipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, ingredients_ppstring, steps_ppstring, self.tools, self.method, self.nutrition)
 
+    # inputs: None
+    # outputs: new Vegan Recipe
     def make_vegan(self):
+        if self.is_vegan:
+            print 'There is already a vegan recipe.'
+            return
         swapped_ingredients = {} #Keep track of swapped ingredients for substitution in steps
         vegan_recipe = copy.deepcopy(self) #deep copy our recipe object
 
@@ -43,12 +49,38 @@ class Recipe:
             step = vegan_recipe.steps[i]
             for replacement in swapped_ingredients.keys():
                 step.replace(replacement, swapped_ingredients[replacement])
-
-
+        vegan_recipe.is_vegan = True
         return vegan_recipe
 
+    # inputs: None
+    # outputs: new non-vegan recipe
+    def make_non_vegan(self):
+        if not self.is_vegan:
+            print 'This is already a non-vegan recipe.'
+            return
+
+        swapped_ingredients = {}
+        non_vegan_recipe = copy.deepcopy(self)
+
+        # swap out the ingredients for non-vegan substitutes
+        for i in range(len(non_vegan_recipe.ingredients)):
+            ingredient = non_vegan_recipe.ingredients[i].name.lower()
+            if ingredient in non_vegan_substitutes.keys():
+                non_vegan_recipe.ingredients[i].name = non_vegan_substitutes[ingredient]
+                swapped_ingredients[ingredient] = non_vegan_substitutes[ingredient]
+
+        # fix steps based on substitutions
+        for i in range(len(non_vegan_recipe.steps)):
+            step = non_vegan_recipe.steps[i]
+            for replacement in swapped_ingredients.keys():
+                step.replace(replacement, swapped_ingredients[replacement])
+        non_vegan_recipe.is_vegan = False
+        return non_vegan_recipe
+
+
+
     #inputs: percent we want to reduce unhealthy ingredients (int)
-    #outputs: new Recipe Object
+    #outputs: new healthier recipe
     ###TIM DOES THIS
     def make_healthy(self):
         choice = input('Choose one of the following options to make your recipe healthier: (1) Substitute unhealthy'
