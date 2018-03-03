@@ -41,17 +41,47 @@ unhealthy_ingredients = [unhealthy_protein, unhealthy_fats, unhealthy_dairy, unh
 
 reduction_substitutes = []
 class Ingredient_Substitute:
-	def __init__(self, name, ratio, supplement, supplement_ratio):
+	def __init__(self, name, substitute, ratio = None):
 		self.name = name
+		self.substitute = substitute
 		self.ratio = ratio
-		self.supplement = supplement
-		self.supplement_ratio = supplement_ratio
 
 def initialize_reduction_substitutes():
 	global reduction_substitutes
-	reduction_substitutes.append(Ingredient_Substitute('fat', .5, 'unsweetened apple sauce', .5))
-	reduction_substitutes.append(Ingredient_Substitute('salt', .5))
-	reduction_substitutes.append(Ingredient_Substitute('sugar', .5, 'almond extract'))
-	reduction_substitutes.append(Ingredient_Substitute('butter', .5, 'unsweetened apple sauce', .5))
+	reduction_substitutes.append(Ingredient_Substitute('fat', 'half fat and half unsweetened apple sauce'))
+	reduction_substitutes.append(Ingredient_Substitute('salt', 'salt', .5))
+	reduction_substitutes.append(Ingredient_Substitute('sugar', 'half sugar and half almond extract'))
+	reduction_substitutes.append(Ingredient_Substitute('butter', 'half butter and half unsweetened apple sauce'))
+	reduction_substitutes.append(Ingredient_Substitute('cheese', 'cheese', .5))
+
+def fix_step(step, ingredient, ratio):
+	'heat 2 tablespoons of salt'
+	step_words = step.split(' ')
+	for i in range(len(step_words)):
+		if step_words[i] == ingredient:
+			for j in range(i, 0, -1):
+				if check_int(step_words[j]):
+					step_words[j] = str(int(step_words[j]) * ratio)
+				elif check_fraction(step_words[j]):
+					fraction = get_fraction(step_words[j]) * ratio
+					step_words[j] = str(fraction)
+
+	return " ".join(step_words)
+
+def get_fraction(fraction):
+	return float(fraction[0]) / float(fraction[2])
+
+def check_fraction(number):
+	if '/' not in number:
+		return False
+	return True
+
+def check_int(number):
+	try:
+		int(number)
+		return True
+	except ValueError:
+		return False
+
 
 initialize_reduction_substitutes()

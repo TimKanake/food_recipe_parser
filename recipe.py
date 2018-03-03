@@ -1,8 +1,8 @@
 import copy
 import random
 from ingredient import Ingredient
-from ingredient_substitutes import vegan_substitutes, healthy_substitutes, unhealthy_ingredients, reduction_substitutes
-
+from ingredient_substitutes import vegan_substitutes, healthy_substitutes, unhealthy_ingredients, reduction_substitutes\
+    , fix_step
 def pretty_print_list(list_in):
     str_out = "\n"
     for x in list_in:
@@ -57,45 +57,52 @@ class Recipe:
 
         healthy_recipe = copy.deepcopy(self)
         if choice == 3:
-            # choice 1
-            # define method of choosing cooking method
+            # TO IMPLEMENT
             pass
         elif choice == 2:
-            # choice 2
-            reduced_ingredient = {}
+            # choice 2: Reduce Quantity of Some Ingredients
+            reduced_ingredients = {}
             for i in range(len(healthy_recipe.ingredients)):
                 ingredient = healthy_recipe.ingredients[i].name.lower()
                 for j in reduction_substitutes:
                     if ingredient == reduction_substitutes[j].name:
-                        ingredient.quantity = ingredient.quantity * reduction_substitutes[j].ratio
-                        if reduction_substitutes[j].supplement is not None:
-                            healthy_recipe.ingredients.append(Ingredient(reduction_substitutes[j].supplement))
-                        reduced_ingredient[ingredient] = ingredient + reduction_substitutes[j].supplement
+                        if reduction_substitutes[j].ratio is None:
+                            reduced_ingredients[ingredient] = [reduction_substitutes[j].substitute, False]
+                            ingredient = reduction_substitutes[j].substitute
+                        else:
+                            healthy_recipe[i].quantity = healthy_recipe[i].quantity * reduction_substitutes[j].ratio
+                            reduced_ingredients[ingredient] = [ingredient, True, reduction_substitutes[j].ratio]
 
-            for i in range(len(healthy_recipe.steps)):
-                step = healthy_recipe[i].step
-                for reduced in reduced_ingredient.keys():
-                    step.replace(reduced, reduced_ingredient[reduced])
-        else:
-            #choice 1 and DEFAULT
-            swapped_ingredients = {}
-            for i in range(len(unhealthy_ingredients)):
-                temp_unhealthy = unhealthy_ingredients[i]
-                for j in range(len(healthy_recipe.ingredients)):
-                    ingredient = healthy_recipe.ingredients[j].name.lower()
-                    if ingredient in temp_unhealthy:
-                        substitute = healthy_substitutes[i][random.randrange(0, len(healthy_substitutes[i]), 1)]
-                        healthy_recipe.ingredients[j].name = substitute
-                        swapped_ingredients[ingredient] = substitute
+            if len(reduced_ingredients) == 0:
+                print 'There are no secondary ingredients to reduce, making recipe healthier by substituting'\ 
+                      ' unhealthy ingredients'
+                pass
+            else:
+                for i in range(len(healthy_recipe.steps)):
+                    step = healthy_recipe[i].step
+                    for reduced in reduced_ingredients.keys():
+                        if reduced_ingredients[reduced][1]:
+                            step = fix_step(step, reduced, reduced_ingredients[reduced][2])
+                        else:
+                            step.replace(reduced, reduced_ingredients[reduced])
+                return healthy_recipe
+        #choice 1 and DEFAULT: Substitute Ingredients
+        swapped_ingredients = {}
+        for i in range(len(unhealthy_ingredients)):
+            temp_unhealthy = unhealthy_ingredients[i]
+            for j in range(len(healthy_recipe.ingredients)):
+                ingredient = healthy_recipe.ingredients[j].name.lower()
+                if ingredient in temp_unhealthy:
+                    substitute = healthy_substitutes[i][random.randrange(0, len(healthy_substitutes[i]), 1)]
+                    healthy_recipe.ingredients[j].name = substitute
+                    swapped_ingredients[ingredient] = substitute
 
-            for i in range(len(healthy_recipe.steps)):
-                step = healthy_recipe.steps[i]
-                for substitute in swapped_ingredients.keys():
-                    step.replace(substitute, swapped_ingredients[substitute])
+        for i in range(len(healthy_recipe.steps)):
+            step = healthy_recipe.steps[i]
+            for substitute in swapped_ingredients.keys():
+                step.replace(substitute, swapped_ingredients[substitute])
 
         return healthy_recipe
-
-
     ###JIMMY DOES THIS
     def change_style(self, style):
         pass
@@ -120,6 +127,4 @@ class Recipe:
             input("Press Enter to continue...")
 
         return None
-
-
 
