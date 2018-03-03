@@ -3,7 +3,6 @@
 
 vegan_substitutes = {}
 vegan_substitutes['milk'] = 'soy milk'
-vegan_substitutes['milk'] = 'soy milk'
 vegan_substitutes['cheese'] = 'vegan cheese'
 vegan_substitutes['eggs'] = 'tofu scramble'
 vegan_substitutes['beef'] = 'vegetable bouillon cubes'
@@ -11,13 +10,32 @@ vegan_substitutes['chicken'] = 'vegetable bouillon cubes'
 vegan_substitutes['butter'] = 'vegan butter'
 vegan_substitutes['yogurt'] = 'vegan yogurt'
 vegan_substitutes['sour cream'] = 'vegan sour cream'
-vegan_substitutes['mayonnaise'] = 'mayonnaise'
+vegan_substitutes['mayonnaise'] = 'vegan mayonnaise'
 vegan_substitutes['gelatin'] = 'agar flakes'
 vegan_substitutes['honey'] = 'sweetener'
 vegan_substitutes['sugar'] = 'beet sugar'
 vegan_substitutes['chocolate'] = 'non-dairy vegan chocolate bar'
 vegan_substitutes['ice cream'] = 'non-dairy vegan ice-cream'
 vegan_substitutes['meat'] = 'beans'
+
+# define vegan to meat substitutes
+
+non_vegan_substitutes = {}
+non_vegan_substitutes['soy milk'] = 'milk'
+non_vegan_substitutes['vegan cheese'] = 'cheese'
+non_vegan_substitutes['tofu scramble'] = 'eggs'
+non_vegan_substitutes['tofu'] = 'chicken'
+non_vegan_substitutes['vegetable bullion cubes'] = 'beef'
+non_vegan_substitutes['vegan butter'] = 'butter'
+non_vegan_substitutes['vegan yogurt'] = 'yogurt'
+non_vegan_substitutes['vegan sour cream'] = 'sour cream'
+non_vegan_substitutes['vegan mayonnaise'] = 'mayonnaise'
+non_vegan_substitutes['agar flakes'] = 'gelatin'
+non_vegan_substitutes['sweetener'] = 'honey'
+non_vegan_substitutes['beet sugar'] = 'sugar'
+non_vegan_substitutes['non-dairy vegan chocolate bar'] = 'chocolate'
+non_vegan_substitutes['non-dairy vegan ice-cream'] = 'ice cream'
+non_vegan_substitutes['beans'] = 'meat'
 
 
 # define healthy substitutes for a range of unhealthy ingredients in recipes
@@ -55,7 +73,6 @@ def initialize_reduction_substitutes():
 	reduction_substitutes.append(Ingredient_Substitute('cheese', 'cheese', .5))
 
 def fix_step(step, ingredient, ratio):
-	'heat 2 tablespoons of salt'
 	step_words = step.split(' ')
 	for i in range(len(step_words)):
 		if step_words[i] == ingredient:
