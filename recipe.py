@@ -1,38 +1,13 @@
 import copy
+import random
 from ingredient import Ingredient
-from pretty_string import pretty_string
+from ingredient_substitutes import vegan_substitutes, healthy_substitutes, unhealthy_ingredients, reduction_substitutes
 
-# define vegan substitutes for non-vegan ingredients
-# reference source is http://www.vegkitchen.com/tips/vegan-substitutions/
-vegan_substitutes = {}
-vegan_substitutes['milk'] = 'soy milk'
-vegan_substitutes['milk'] = 'soy milk'
-vegan_substitutes['cheese'] = 'vegan cheese'
-vegan_substitutes['eggs'] = 'tofu scramble'
-vegan_substitutes['beef'] = 'vegetable bouillon cubes'
-vegan_substitutes['chicken'] = 'vegetable bouillon cubes'
-vegan_substitutes['butter'] = 'vegan butter'
-vegan_substitutes['yogurt'] = 'vegan yogurt'
-vegan_substitutes['sour cream'] = 'vegan sour cream'
-vegan_substitutes['mayonnaise'] = 'mayonnaise'
-vegan_substitutes['gelatin'] = 'agar flakes'
-vegan_substitutes['honey'] = 'sweetener'
-vegan_substitutes['sugar'] = 'beet sugar'
-vegan_substitutes['chocolate'] = 'non-dairy vegan chocolate bar'
-vegan_substitutes['ice cream'] = 'non-dairy vegan ice-cream'
-vegan_substitutes['meat'] = 'beans'
-
-healthy_substiutes = {}
-
-unhealthy_ingredients = []
-unhealthy_ingredients.append("butter")
-unhealthy_ingredients.append("cheese")
-unhealthy_ingredients.append("sugar")
-unhealthy_ingredients.append("salt")
-unhealthy_ingredients.append("shorteing")
-unhealthy_ingredients.append("oil")
-
-unnecessary_ingredients = {}
+def pretty_print_list(list_in):
+    str_out = "\n"
+    for x in list_in:
+        str_out += str(x) + "\n"
+    return str_out
 
 class Recipe:
     def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None):
@@ -47,12 +22,10 @@ class Recipe:
     #outputs: new Recipe Object
     def __str__(self):
 
-        p_ingredients = pretty_string(self.ingredients, "ingredients", "vertical")
-        p_steps = pretty_string(self.steps, "steps", "vertical")
-        p_method = pretty_string(self.method, "methods", "horizontal")
-        p_tools = pretty_string(self.tools, "tools", "horizontal")
+        ingredients_ppstring = pretty_print_list(self.ingredients)
+        steps_ppstring = pretty_print_list(self.steps)
 
-        return """\n\nRecipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, p_ingredients, p_steps, p_tools, p_method, self.nutrition)
+        return """Recipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, ingredients_ppstring, steps_ppstring, self.tools, self.method, self.nutrition)
 
     def make_vegan(self):
         swapped_ingredients = {} #Keep track of swapped ingredients for substitution in steps
@@ -77,15 +50,51 @@ class Recipe:
     #inputs: percent we want to reduce unhealthy ingredients (int)
     #outputs: new Recipe Object
     ###TIM DOES THIS
-    def make_healthy(self, percent_reduction = 0.5):
-        healthy_recipe = copy.deepcopy(self)
+    def make_healthy(self):
+        choice = input('Choose one of the following options to make your recipe healthier: (1) Substitute unhealthy\
+         ingredients with healthier ingredients, (2) Reduce amount of secondary unhealthy ingredients, (3)\
+          Change cooking method. Enter your choice by pressing 1, 2 or 3:  ')
 
-        for i in range(len(self.ingredients)):
-            ingredient = self.ingredients[i].name.lower()
-            if ingredient in unhealthy_ingredients:
-                self.ingredients[i].amount = float(self.ingredients.amount) * percent_reduction
+        healthy_recipe = copy.deepcopy(self)
+        if choice == 3:
+            # choice 1
+            # define method of choosing cooking method
+            pass
+        elif choice == 2:
+            # choice 2
+            reduced_ingredient = {}
+            for i in range(len(healthy_recipe.ingredients)):
+                ingredient = healthy_recipe.ingredients[i].name.lower()
+                for j in reduction_substitutes:
+                    if ingredient == reduction_substitutes[j].name:
+                        ingredient.quantity = ingredient.quantity * reduction_substitutes[j].ratio
+                        if reduction_substitutes[j].supplement is not None:
+                            healthy_recipe.ingredients.append(Ingredient(reduction_substitutes[j].supplement))
+                        reduced_ingredient[ingredient] = ingredient + reduction_substitutes[j].supplement
+
+            for i in range(len(healthy_recipe.steps)):
+                step = healthy_recipe[i].step
+                for reduced in reduced_ingredient.keys():
+                    step.replace(reduced, reduced_ingredient[reduced])
+        else:
+            #choice 1 and DEFAULT
+            swapped_ingredients = {}
+            for i in range(len(unhealthy_ingredients)):
+                temp_unhealthy = unhealthy_ingredients[i]
+                for j in range(len(healthy_recipe.ingredients)):
+                    ingredient = healthy_recipe.ingredients[j].name.lower()
+                    if ingredient in temp_unhealthy:
+                        substitute = healthy_substitutes[i][random.randrange(0, len(healthy_substitutes[i]), 1)]
+                        healthy_recipe.ingredients[j].name = substitute
+                        swapped_ingredients[ingredient] = substitute
+
+            for i in range(len(healthy_recipe.steps)):
+                step = healthy_recipe.steps[i]
+                for substitute in swapped_ingredients.keys():
+                    step.replace(substitute, swapped_ingredients[substitute])
 
         return healthy_recipe
+
 
     ###JIMMY DOES THIS
     def change_style(self, style):
