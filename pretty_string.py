@@ -8,7 +8,8 @@ def vertical_list_to_str(list_in, list_name):
         if list_name == "ingredients":
             str_out += "\t" + str(x) + "\n"
         if list_name == "steps":
-            str_out += "\tStep " + str(count) + ". " + str(x) + "\n"
+            #str_out += "\tStep " + str(count) + ". " + str(x) + "\n"
+            str_out += "\t" + str(x) + "\n"
             count += 1
     str_out = str_out[:-1] # remove the last \n character
     return str_out

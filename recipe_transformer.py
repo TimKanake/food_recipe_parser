@@ -103,7 +103,6 @@ def parse_method(r_steps):
 
     sorted_methods = sorted(method_frequency.items(), key = operator.itemgetter(1))
     sorted_methods.reverse()
-    print sorted_methods
     return sorted_methods
 
 # Take the scraped steps and split by periods
@@ -124,7 +123,6 @@ def parse_steps(r_steps):
 # By A) Checking in which steps are the ingredients, tools, methods in the recipe used.
 # and B) Checking for numbers and time-related words like "minutes" "hours" "seconds"
 def parse_steps2(steps, ingredients, tools, methods):
-    print "parse_steps2\n"
     count = 0
     list_out = [] # List to hold the Step objects created from each step
 
@@ -190,8 +188,8 @@ def make_recipe(url):
     refined_steps = parse_steps(r_steps)
     tools = parse_tools(r_steps)
     method = parse_method(r_steps)
-
-    r = Recipe(r_name, ingredients, refined_steps, tools, method)
+    step_objs = parse_steps2(refined_steps, ingredients, tools, method)
+    r = Recipe(r_name, ingredients, step_objs, tools, method)
 
     return r
 
@@ -214,3 +212,4 @@ def test2_get_steps(url):
         print step
 
 #test2_get_steps("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
+print make_recipe("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
