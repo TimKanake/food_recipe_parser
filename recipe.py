@@ -1,13 +1,9 @@
 import copy
 import random
+from pretty_string import pretty_string
 from ingredient import Ingredient
 from ingredient_substitutes import vegan_substitutes, healthy_substitutes, unhealthy_ingredients, reduction_substitutes\
     , fix_step, non_vegan_substitutes
-def pretty_print_list(list_in):
-    str_out = "\n"
-    for x in list_in:
-        str_out += str(x) + "\n"
-    return str_out
 
 class Recipe:
     def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None, is_vegan = False):
@@ -23,10 +19,12 @@ class Recipe:
     #outputs: new Recipe Object
     def __str__(self):
 
-        ingredients_ppstring = pretty_print_list(self.ingredients)
-        steps_ppstring = pretty_print_list(self.steps)
+        ingredients_ppstring = pretty_string(self.ingredients, "ingredients", "vertical")
+        steps_ppstring = pretty_string(self.steps, "steps", "vertical")
+        p_tools = pretty_string(self.tools, "tools", 'horizontal')
+        p_methods = pretty_string(self.method, "methods", "horizontal")
 
-        return """Recipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, ingredients_ppstring, steps_ppstring, self.tools, self.method, self.nutrition)
+        return """Recipe Name: {0!s}\nIngredients: {1!s}\nSteps: {2!s}\nTools: {3!s}\nMethod: {4!s}\nNutrition {5!s}""".format(self.name, ingredients_ppstring, steps_ppstring, p_tools, p_methods, self.nutrition)
 
     # inputs: None
     # outputs: new Vegan Recipe

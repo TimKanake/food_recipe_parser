@@ -103,6 +103,7 @@ def parse_method(r_steps):
 
     sorted_methods = sorted(method_frequency.items(), key = operator.itemgetter(1))
     sorted_methods.reverse()
+    print sorted_methods
     return sorted_methods
 
 # Take the scraped steps and split by periods
@@ -127,6 +128,8 @@ def parse_steps2(steps, ingredients, tools, methods):
     count = 0
     list_out = [] # List to hold the Step objects created from each step
 
+    last_method = None
+    ambiguous_terms = ["cook"]
     # For each step...
     for step in steps:
         steps_obj = Step(number=count, ingredients = [], tools = [], methods = [], times = [], original_document=step + ".")
@@ -143,6 +146,7 @@ def parse_steps2(steps, ingredients, tools, methods):
                     if x in step:
                         steps_obj.ingredients.append(x)
         steps_obj.ingredients = list(OrderedDict.fromkeys(steps_obj.ingredients))
+
         # Tools
         for t in tools:
             if t[0] in step:
@@ -152,7 +156,13 @@ def parse_steps2(steps, ingredients, tools, methods):
         # Methods
         for m in methods:
             if m[0] in step:
+                last_method = m
                 steps_obj.methods.append(m)
+
+        for x in ambiguous_terms:
+            if x in step and last_method is not None:
+                steps_obj.methods.append(last_method)
+
         steps_obj.methods = list(OrderedDict.fromkeys(steps_obj.methods))
 
         # Times
@@ -161,7 +171,6 @@ def parse_steps2(steps, ingredients, tools, methods):
         for word in time_words:
             for x in range(len(s_steps)):
                 if word in s_steps[x]:
-                    print s_steps[x-1:x+1]
                     if s_steps[x-1].isdigit() or s_steps[x-1] in "an":
                         steps_obj.times = s_steps[x-1] + " " + s_steps[x]
                         if steps_obj.times[-1] in ".,":
