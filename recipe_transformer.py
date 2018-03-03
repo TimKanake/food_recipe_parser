@@ -1,7 +1,9 @@
 from ingredient import Ingredient
 from recipe import Recipe
 from scraper import scrapeRecipe, scrapeTools, scrapeMethods, scrapeMeasurements
+from steps import Step
 import operator
+
 
 #takes list of raw ingredients and returns list of Ingredient objects
 def parse_ingredients(r_ingredients):
@@ -105,6 +107,29 @@ def parse_steps(r_steps):
             refined_steps.append(s)
     return refined_steps
 
+
+# (optional) Parse the directions into a series of steps that each consist of ingredients, tools, methods, and times
+def parse_steps2(steps, ingredients, tools, methods):
+    print "parse_steps2\n"
+    count = 0
+    list_out = []
+    for step in steps:
+        steps_obj = Step(number=count, original_document=step)
+        #steps_obj.number = count
+        count +=1
+        for i in ingredients:
+            if i.name in step:
+                steps_obj.ingredients.append(i.name)
+        for t in tools:
+            if t[0] in step:
+                steps_obj.tools.append(t)
+        for m in methods:
+            if m[0] in step:
+                steps_obj.methods.append(m)
+        print steps_obj
+        list_out.append(steps_obj)
+    return list_out
+
 #given a url to an allrecipes page, will return Recipe object
 def make_recipe(url):
     r_ingredients, r_steps, r_name = scrapeRecipe(url)
@@ -118,11 +143,21 @@ def make_recipe(url):
 
     return r
 
-#example run on 4 recipes
+#### Tests ######
+
+# Example run on 4 recipes
 def test1():
     print make_recipe("https://www.allrecipes.com/recipe/43655/perfect-turkey/")
     print make_recipe("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
     print make_recipe("https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/")
     print make_recipe("https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/")
 
-
+# Test out parsing steps into what ingredients, tools, methods, and time is needed
+def test2():
+    r = make_recipe("https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/")
+    print r
+    list_of_steps = parse_steps2(r.steps, r.ingredients, r.tools, r.method)
+    print "List of Steps:\n"
+    for step in list_of_steps:
+        print step
+test2()
