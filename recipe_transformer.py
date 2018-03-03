@@ -8,7 +8,7 @@ from collections import OrderedDict
 
 #takes list of raw ingredients and returns list of Ingredient objects
 def parse_ingredients(r_ingredients):
-    remove_words = ["to","taste","more","or"]
+    remove_words = ["to","taste","more","or", "and"] # maybe try to fork on 'and'
     ingredients = []
     measurements = scrapeMeasurements()
     for ri in r_ingredients:
@@ -130,7 +130,7 @@ def parse_steps2(steps, ingredients, tools, methods):
     ambiguous_terms = ["cook"]
     # For each step...
     for step in steps:
-        steps_obj = Step(number=count, ingredients = [], tools = [], methods = [], times = [], original_document=step + ".")
+        steps_obj = Step(number=count, ingredients = [], tools = [], methods = [], times = [], original_document=step)
         step = step.lower()
         step = step[:-1]
         count +=1
@@ -142,7 +142,7 @@ def parse_steps2(steps, ingredients, tools, methods):
             else:
                 for x in i.name.split(" "):
                     if x in step:
-                        steps_obj.ingredients.append(x)
+                        steps_obj.ingredients.append(i.name)
         steps_obj.ingredients = list(OrderedDict.fromkeys(steps_obj.ingredients))
 
         # Tools
@@ -185,10 +185,10 @@ def make_recipe(url):
     r_ingredients, r_steps, r_name = scrapeRecipe(url)
 
     ingredients = parse_ingredients(r_ingredients)
-    refined_steps = parse_steps(r_steps)
+    #refined_steps = parse_steps(r_steps)
     tools = parse_tools(r_steps)
     method = parse_method(r_steps)
-    step_objs = parse_steps2(refined_steps, ingredients, tools, method)
+    step_objs = parse_steps2(r_steps, ingredients, tools, method)
     r = Recipe(r_name, ingredients, step_objs, tools, method)
 
     return r
@@ -212,4 +212,4 @@ def test2_get_steps(url):
         print step
 
 #test2_get_steps("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
-print make_recipe("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
+print make_recipe("https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/")
