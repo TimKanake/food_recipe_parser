@@ -116,10 +116,11 @@ def parse_steps2(steps, ingredients, tools, methods):
     ambiguous_terms = ["cook"]
     # For each step...
     for step in steps:
+        # Initiate a Step object (see steps.py)
         steps_obj = Step(number=count, ingredients = [], tools = [], methods = [], times = [], original_document=step)
-        step = step.lower()
+        step = step.lower() # edit the step string a little bit
         step = step[:-1]
-        count +=1
+        count +=1 # the step count to keep track of order
 
         # Ingredients
         for i in ingredients:
@@ -129,12 +130,16 @@ def parse_steps2(steps, ingredients, tools, methods):
                 for x in i.name.split(" "):
                     if x in step:
                         steps_obj.ingredients.append(i.name)
+
+        # Remove duplicates from list while preserving order
         steps_obj.ingredients = list(OrderedDict.fromkeys(steps_obj.ingredients))
 
         # Tools
         for t in tools:
             if t[0] in step:
                 steps_obj.tools.append(t)
+
+        # Remove duplicates from list while preserving order
         steps_obj.tools = list(OrderedDict.fromkeys(steps_obj.tools))
 
         # Methods
@@ -147,9 +152,12 @@ def parse_steps2(steps, ingredients, tools, methods):
             if x in step and last_method is not None:
                 steps_obj.methods.append(last_method)
 
+        # Remove duplicates from list while preserving order
         steps_obj.methods = list(OrderedDict.fromkeys(steps_obj.methods))
 
         # Times
+        # Right now this only picks up things like "5 minutes", "an hour", "a minute"
+        # but it ideally would get "5 to 10 minutes" or "an hour and a half" or "1 1/2 hours"
         s_steps = step.split(" ")
         time_words = scrapeTimeMeasuements()
         for word in time_words:
@@ -191,7 +199,6 @@ def test1():
 # Test out parsing steps into what ingredients, tools, methods, and time is needed
 def test2_get_steps(url):
     r = make_recipe(url)
-    #list_of_steps = parse_steps2(r.steps, r.ingredients, r.tools, r.method)
     print "List of Steps:\n"
     for step in r.steps:
         print step
@@ -201,8 +208,7 @@ def test3_make_recipes_from_list(urls):
         r = make_recipe(x)
         print r
 
-
-
+# I tried to pick a good mix of recipes from the browsing section of the site: https://www.allrecipes.com/recipes/
 test3_make_recipes_from_list(["https://www.allrecipes.com/recipe/242314/browned-butter-banana-bread/",
                                 "https://www.allrecipes.com/recipe/6788/amish-white-bread/",
                                 "https://www.allrecipes.com/recipe/17644/german-chocolate-cake-iii/",

@@ -5,12 +5,9 @@ eecs_337_final_project
 
 to do list for parsing/ recipe generation
 ------------------------------------------
-- extend time calculation for hours and seconds
 - regex to cleaner match results
-- more tests with different recipes to find blindspots
 - extend web scraping to cover we have hardcoded
-- simplify messy code
-
+- descriptors of food
 
 
 
