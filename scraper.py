@@ -64,5 +64,5 @@ def scrapeMeasurements():
     return measurements
 
 def scrapeTimeMeasuements():
-    return ["minute", "hour", "second", "jiffy", "moment", "nanosecond"]
+    return ["hour", "minute", "second", "nanosecond"]
 

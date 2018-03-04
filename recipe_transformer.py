@@ -105,20 +105,6 @@ def parse_method(r_steps):
     sorted_methods.reverse()
     return sorted_methods
 
-# Take the scraped steps and split by periods
-def parse_steps(r_steps):
-    refined_steps = []
-    for x in r_steps:
-        x = x.split(".")
-        if "" in x: x.remove("")
-        for step in x:
-            s = step
-            if s[0] == ' ':
-                s = s[1:]
-            refined_steps.append(s)
-    return refined_steps
-
-
 # (optional) Parse the directions into a series of steps that each consist of ingredients, tools, methods, and times
 # By A) Checking in which steps are the ingredients, tools, methods in the recipe used.
 # and B) Checking for numbers and time-related words like "minutes" "hours" "seconds"
@@ -186,7 +172,6 @@ def make_recipe(url):
     r_ingredients, r_steps, r_name = scrapeRecipe(url)
 
     ingredients = parse_ingredients(r_ingredients)
-    #refined_steps = parse_steps(r_steps)
     tools = parse_tools(r_steps)
     method = parse_method(r_steps)
     step_objs = parse_steps2(r_steps, ingredients, tools, method)
@@ -206,12 +191,30 @@ def test1():
 # Test out parsing steps into what ingredients, tools, methods, and time is needed
 def test2_get_steps(url):
     r = make_recipe(url)
-    print r
-    list_of_steps = parse_steps2(r.steps, r.ingredients, r.tools, r.method)
+    #list_of_steps = parse_steps2(r.steps, r.ingredients, r.tools, r.method)
     print "List of Steps:\n"
-    for step in list_of_steps:
+    for step in r.steps:
         print step
 
+def test3_make_recipes_from_list(urls):
+    for x in urls:
+        r = make_recipe(x)
+        print r
+        for y in r.steps:
+            print y
+
+
+
+test3_make_recipes_from_list(["https://www.allrecipes.com/recipe/242314/browned-butter-banana-bread/",
+                                "https://www.allrecipes.com/recipe/6788/amish-white-bread/",
+                                "https://www.allrecipes.com/recipe/17644/german-chocolate-cake-iii/",
+                                "https://www.allrecipes.com/recipe/223406/quick-savory-grilled-peaches/",
+                                "https://www.allrecipes.com/recipe/148765/real-new-orleans-style-bbq-shrimp/",
+                                "https://www.allrecipes.com/recipe/17837/four-seasons-enchiladas/",
+                                "https://www.allrecipes.com/recipe/238261/chef-johns-classic-potato-pancakes/",
+                                "https://www.allrecipes.com/recipe/14859/baba-ghanoush/"])
+
 #test2_get_steps("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
-print make_recipe("https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/")
-test1()
+#print make_recipe("https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/")
+#test2_get_steps("https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/")
+#test1()
