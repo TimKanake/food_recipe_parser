@@ -52,12 +52,18 @@ def horz_list_to_str(list_in, list_name=None):
                 if not x_split[0].isdigit():
                     hours.append(1)
                 else:
-                    hours.append(int(x[0]))
+                    hours.append(int(x_split[0]))
             if "minute" in x_split[1]:
                 if not x_split[0].isdigit():
                     minutes.append(1)
                 else:
-                    minutes.append(int(x[0]))
+                    minutes.append(int(x_split[0]))
+            if "second" in x_split[1]:
+                if not x_split[0].isdigit():
+                    seconds.append(1)
+                else:
+                    seconds.append(int(x_split[0]))
+
         total_min = sum(minutes)
         total_hr = sum(hours)
         total_s = sum(seconds)
