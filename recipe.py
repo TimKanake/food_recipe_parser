@@ -3,7 +3,8 @@ import random
 from pretty_string import pretty_string
 from ingredient import Ingredient
 from ingredient_substitutes import vegan_substitutes, healthy_substitutes, unhealthy_ingredients, reduction_substitutes\
-    , fix_step, non_vegan_substitutes
+    , fix_step, non_vegan_substitutes, convert_quantity
+from steps import Step
 
 class Recipe:
     def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None, is_vegan = False):
@@ -86,6 +87,8 @@ class Recipe:
           'Change cooking method. Enter your choice by pressing 1, 2 or 3:  ')
 
         healthy_recipe = copy.deepcopy(self)
+        preparation_steps = list()
+        prepared_ingredients = []
         if choice == 3:
             # TO IMPLEMENT
             pass
@@ -96,29 +99,35 @@ class Recipe:
                 ingredient = healthy_recipe.ingredients[i].name.lower()
                 for j in range(len(reduction_substitutes)):
                     if ingredient == reduction_substitutes[j].name:
-                        if reduction_substitutes[j].ratio is None:
-                            reduced_ingredients[ingredient] = [reduction_substitutes[j].substitute, False]
-                            healthy_recipe.ingredients[i].name = reduction_substitutes[j].substitute
-                        else:
+                        if reduction_substitutes[j].additional_ingredient is None: #salt reduce by half
+                            reduced_ingredients[ingredient] = [reduction_substitutes[j].substitute, False, reduction_substitutes[j].ratio]
                             healthy_recipe.ingredients[i].quantity = healthy_recipe.ingredients[i].quantity * reduction_substitutes[j].ratio
-                            healthy_recipe.ingredients.append(Ingredient(reduction_substitutes[j].supplement, healthy_recipe.ingredients[i].quantity,
+                        else:
+                            healthy_recipe.ingredients[i].quantity = convert_quantity(healthy_recipe.ingredients[i].quantity) * reduction_substitutes[j].ratio
+                            healthy_recipe.ingredients.append(Ingredient(reduction_substitutes[j].additional_ingredient, healthy_recipe.ingredients[i].quantity,
                                                                          healthy_recipe.ingredients[i].measurement, healthy_recipe.ingredients[i].descriptors))
-                            reduced_ingredients[ingredient] = [reduction_substitutes[j].substitute, True, reduction_substitutes[j].ratio]
-
+                            reduced_ingredients[ingredient] = [reduction_substitutes[j].substitute, True, reduction_substitutes[j].ratio, reduction_substitutes[j].additional_ingredient]
+                        break
             if len(reduced_ingredients) == 0:
                 print 'There are no secondary ingredients to reduce, making recipe healthier by substituting' \
                       ' unhealthy ingredients \n \n'
                 pass
             else:
-                print reduced_ingredients
                 for i in range(len(healthy_recipe.steps)):
-                    step = healthy_recipe.steps[i]
+                    step = healthy_recipe.steps[i].original_document
                     for reduced in reduced_ingredients.keys():
                         if reduced_ingredients[reduced][1]:
-                            step = fix_step(step, reduced, reduced_ingredients[reduced][2])
-                        else:
                             step = step.replace(reduced, reduced_ingredients[reduced][0])
-                    healthy_recipe.steps[i] = step
+                            if reduced not in prepared_ingredients:
+                                preparation_steps.append(Step(
+                                    original_document='Mix the ' + reduced + ' with the ' + reduced_ingredients[reduced][
+                                        3] + ' in a bowl.', tools=['bowl']))
+                                prepared_ingredients.append(reduced)
+                        else:
+                            step = fix_step(step, reduced, reduced_ingredients[reduced[2]])
+                    healthy_recipe.steps[i].original_document = step
+                healthy_recipe.steps = preparation_steps + healthy_recipe.steps
+                print self
                 return healthy_recipe
         #choice 1 and DEFAULT: Substitute Ingredients
         swapped_ingredients = {}
@@ -135,7 +144,6 @@ class Recipe:
             step = healthy_recipe.steps[i]
             for substitute in swapped_ingredients.keys():
                 step.replace(substitute, swapped_ingredients[substitute])
-
         return healthy_recipe
     ###JIMMY DOES THIS
     def change_style(self, style):
@@ -146,8 +154,6 @@ class Recipe:
 
     def change_cooking_method(self, method):
         pass
-
-
     #inputs: none
     #outputs: none
     ###JIMMY DOES OUTPuTS

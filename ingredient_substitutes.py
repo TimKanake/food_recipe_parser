@@ -59,18 +59,19 @@ unhealthy_ingredients = [unhealthy_protein, unhealthy_fats, unhealthy_dairy, unh
 
 reduction_substitutes = []
 class Ingredient_Substitute:
-	def __init__(self, name, substitute, ratio = None):
+	def __init__(self, name, substitute, additional_ingredient = None, ratio = None):
 		self.name = name
 		self.substitute = substitute
+		self.additional_ingredient = additional_ingredient
 		self.ratio = ratio
 
 def initialize_reduction_substitutes():
 	global reduction_substitutes
-	reduction_substitutes.append(Ingredient_Substitute('fat', 'half fat and half unsweetened apple sauce'))
-	reduction_substitutes.append(Ingredient_Substitute('salt', 'salt', .5))
-	reduction_substitutes.append(Ingredient_Substitute('sugar', 'half sugar and half almond extract'))
-	reduction_substitutes.append(Ingredient_Substitute('butter', 'half butter and half unsweetened apple sauce'))
-	reduction_substitutes.append(Ingredient_Substitute('cheese', 'cheese', .5))
+	reduction_substitutes.append(Ingredient_Substitute('fat', 'mixed fat and unsweetened apple sauce', 'unsweetened apple sauce', .5))
+	reduction_substitutes.append(Ingredient_Substitute('salt', 'salt', None, .5))
+	reduction_substitutes.append(Ingredient_Substitute('sugar', 'mixed sugar and almond extract', 'almond extract', .5))
+	reduction_substitutes.append(Ingredient_Substitute('butter', 'mixed butter and unsweetened apple sauce', 'unsweetened apple sauce', .5))
+	reduction_substitutes.append(Ingredient_Substitute('cheese', 'cheese', None, .5))
 
 def fix_step(step, ingredient, ratio):
 	step_words = step.split(' ')
@@ -99,6 +100,12 @@ def check_int(number):
 		return True
 	except ValueError:
 		return False
+
+def convert_quantity(quantity):
+	if check_int(quantity):
+		return int(quantity)
+	elif check_fraction(quantity):
+		return get_fraction(quantity)
 
 
 initialize_reduction_substitutes()
