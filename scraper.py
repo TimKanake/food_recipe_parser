@@ -31,7 +31,7 @@ def scrapeTools():
     document = urllib2.urlopen(url).read()
     soup = BeautifulSoup(document, "html.parser")
     headers = soup.findAll('th')
-    strings = ['knife','food processor','saute pan','stock pot','brush','roasting rack','roasting pan','pot','pan','slow cooker','fork','spoon','skillet','whisk', "oven"]
+    strings = ['knife','food processor','saute pan','stock pot','brush','roasting rack','roasting pan','loaf pan','pot','pan','slow cooker','fork','spoon','skillet','whisk', "oven"]
     for h in headers:
         if h.get('scope') == "row" and (h.get('class') == None or "navbox-group" not in h.get('class')):
             s = h.string
@@ -60,7 +60,7 @@ def scrapeMethods():
 
 #returns a pretty good list of cooking measurements, hardcoded completely for now
 def scrapeMeasurements():
-    measurements = ["cup","can","tablespoon","teaspoon","clove","rack","pound","bottle","pinch","ounce","oz.","dash","pint","quart","gallon","kilogram","gram","milliliter","liter","stick","peck","jigger"]
+    measurements = ["cup","can","tablespoon","teaspoon","clove","rack","pound","bottle","pinch","ounce","oz.","dash","pint","quart","gallon","kilogram","gram","milliliter","liter","stick","peck","jigger","square"]
     return measurements
 
 def scrapeTimeMeasuements():
