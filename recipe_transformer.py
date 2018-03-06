@@ -209,15 +209,15 @@ def test3_make_recipes_from_list(urls):
         print r
 
 # I tried to pick a good mix of recipes from the browsing section of the site: https://www.allrecipes.com/recipes/
-test3_make_recipes_from_list(["https://www.allrecipes.com/recipe/242314/browned-butter-banana-bread/",
-                                "https://www.allrecipes.com/recipe/6788/amish-white-bread/",
-                                "https://www.allrecipes.com/recipe/17644/german-chocolate-cake-iii/",
-                                "https://www.allrecipes.com/recipe/223406/quick-savory-grilled-peaches/",
-                                "https://www.allrecipes.com/recipe/148765/real-new-orleans-style-bbq-shrimp/",
-                                "https://www.allrecipes.com/recipe/17837/four-seasons-enchiladas/",
-                                "https://www.allrecipes.com/recipe/238261/chef-johns-classic-potato-pancakes/",
-                                "https://www.allrecipes.com/recipe/14859/baba-ghanoush/",
-                                "https://www.allrecipes.com/recipe/260837/coconut-milk-hot-chocolate/"])
+# test3_make_recipes_from_list(["https://www.allrecipes.com/recipe/242314/browned-butter-banana-bread/",
+#                                 "https://www.allrecipes.com/recipe/6788/amish-white-bread/",
+#                                 "https://www.allrecipes.com/recipe/17644/german-chocolate-cake-iii/",
+#                                 "https://www.allrecipes.com/recipe/223406/quick-savory-grilled-peaches/",
+#                                 "https://www.allrecipes.com/recipe/148765/real-new-orleans-style-bbq-shrimp/",
+#                                 "https://www.allrecipes.com/recipe/17837/four-seasons-enchiladas/",
+#                                 "https://www.allrecipes.com/recipe/238261/chef-johns-classic-potato-pancakes/",
+#                                 "https://www.allrecipes.com/recipe/14859/baba-ghanoush/",
+#                                 "https://www.allrecipes.com/recipe/260837/coconut-milk-hot-chocolate/"])
 
 #test2_get_steps("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
 #print make_recipe("https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/")

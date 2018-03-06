@@ -54,7 +54,7 @@ healthy_grains = ['brown rice', 'wild rice', 'whole wheat pasta', 'buckwheat', '
 unhealthy_grains = ['white rice', 'pasta', 'macaroni', 'noodles', 'spaghetti']
 
 healthy_substitutes = [healthy_protein, healthy_fats, healthy_dairy, healthy_sugars, healthy_salts, healthy_grains]
-unhealthy_ingredients = [unhealthy_protein, unhealthy_fats, unhealthy_dairy, unhealthy_sugars, unhealthy_salts,
+unhealthy_substitutes = [unhealthy_protein, unhealthy_fats, unhealthy_dairy, unhealthy_sugars, unhealthy_salts,
                          unhealthy_grains]
 
 reduction_substitutes = []
