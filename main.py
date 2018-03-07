@@ -33,13 +33,13 @@ def main():
     elif function == "make_healthy":
         recipe.make_healthy().display_recipe()
     elif function == "make_unhealthy":
-        print recipe.make_unhealthy()
+        recipe.make_unhealthy().display_recipe()
     elif function == "change_style":
-        print recipe.change_style(function_param)
+        recipe.change_style(function_param).display_recipe()
     elif function == "DIY_to_easy":
-        print recipe.DIY_to_easy()
+        recipe.DIY_to_easy().display_recipe()
     elif function == "change_cooking_method":
-        print recipe.change_cooking_method(function_param)
+        recipe.change_cooking_method(function_param).display_recipe()
 
     return
 
