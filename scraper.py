@@ -60,8 +60,8 @@ def scrapeTools():
                 strings.append(s.lower())
 
     url2 = "https://www.mealime.com/kitchen-essentials-list"
-    document = urllib2.urlopen(url2).read()
-##    document = getPage(url)
+##    document = urllib2.urlopen(url2).read()
+    document = getPage(url2)
     soup = BeautifulSoup(document, "html.parser")
     headers = soup.findAll('h3')
 
