@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import urllib2
+import csv
 
 #returns raw ingredients, steps, and recipe name from URL
 def scrapeRecipe(url):
@@ -65,4 +66,41 @@ def scrapeMeasurements():
 
 def scrapeTimeMeasuements():
     return ["hour", "minute", "second", "nanosecond"]
+
+def scrapeDescriptors():
+    return ["skinless","boneless","fresh","thin","thick","low-sodium"]
+
+def scrapePreparations():
+    return ["peeled","sliced","dried","ground","thinly sliced"]
+    
+def scrapeFoods():
+    filepath = "foods.csv"
+    baseurl = "https://www.bbc.co.uk/food/ingredients/by/letter/"
+    foods = []
+    for i in range(97,123):
+        url = baseurl + chr(i)
+        print url
+        document = urllib2.urlopen(url).read()
+        soup = BeautifulSoup(document, "html.parser")
+        links = soup.findAll('li')
+        for link in links:
+            if link.get("class") == [u'resource', u'food']:
+                food = link.get("id").replace('_',' ')
+                foods.append(food)
+    writer = csv.writer(open(filepath,'wb'))
+    for food in foods:
+        writer.writerow([food])
+
+def loadFoods():
+    foods = []
+    reader = csv.reader(open("foods.csv"))
+    for row in reader:
+        foods.append(row[0])
+    foods += ["baking soda","tortilla","bell pepper"]
+    foods.remove("mince")
+    return foods
+        
+        
+    
+    
 

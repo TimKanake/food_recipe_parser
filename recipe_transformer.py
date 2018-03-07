@@ -1,6 +1,6 @@
 from ingredient import Ingredient
 from recipe import Recipe
-from scraper import scrapeRecipe, scrapeTools, scrapeMethods, scrapeMeasurements, scrapeTimeMeasuements
+from scraper import scrapeRecipe, scrapeTools, scrapeMethods, scrapeMeasurements, scrapeTimeMeasuements, scrapeDescriptors, scrapePreparations, scrapeFoods, loadFoods
 from steps import Step
 import operator
 from collections import OrderedDict
@@ -8,7 +8,7 @@ from collections import OrderedDict
 
 #takes list of raw ingredients and returns list of Ingredient objects
 def parse_ingredients(r_ingredients):
-    remove_words = ["to","taste","more","or", "and"] # maybe try to fork on 'and'
+    remove_words = ["to","taste","more","or","and"] # maybe try to fork on 'and'
     ingredients = []
     measurements = scrapeMeasurements()
     for ri in r_ingredients:
@@ -43,18 +43,40 @@ def parse_ingredients(r_ingredients):
                 counter += 1
         if measurement != "" and measurement[-1] == 's':
             measurement = measurement[:-1]
-
-        #name
+            
         if halt == False:
             counter = old
-        name = ' '.join(split_words[counter:])
 
-        #preparation
-        preparation = ""
-        if ',' in name:
-            preparation = name.split(',')[1]
-            name = name.split(',')[0]
-        ingredients.append(Ingredient(name, quantity, measurement, [], preparation))
+        #name, descriptor, preparation
+        foods = loadFoods()
+        descriptor = ''
+        preparation = ''
+        remaining = ' '.join(split_words[counter:])
+        longestfood = ''
+        for food in foods:
+            if food in remaining.lower():
+                if len(food) > len(longestfood):
+                    longestfood = food
+        if longestfood == '':
+            name = remaining.split(',')[0]
+            if ',' in remaining:
+                preparation = remaining.split(',')[1]
+        else:
+            name = longestfood
+            foundfood = False
+            end = -1
+            for i,word in enumerate(split_words[counter:]):
+                if word.lower()[:-1] in name:
+                    if not foundfood:
+                        start = i
+                    foundfood = True
+                elif foundfood:
+                    end = i
+            if foundfood:
+                descriptor = ' '.join(split_words[counter:counter + start])
+                if end != -1:
+                    preparation = ' '.join(split_words[counter + end:])
+        ingredients.append(Ingredient(name, quantity, measurement, descriptor, preparation))
     return ingredients
 
 ###DAN AND ANDRE DO THIS
@@ -209,15 +231,19 @@ def test3_make_recipes_from_list(urls):
         print r
 
 # I tried to pick a good mix of recipes from the browsing section of the site: https://www.allrecipes.com/recipes/
-test3_make_recipes_from_list(["https://www.allrecipes.com/recipe/242314/browned-butter-banana-bread/",
-                                "https://www.allrecipes.com/recipe/6788/amish-white-bread/",
-                                "https://www.allrecipes.com/recipe/17644/german-chocolate-cake-iii/",
-                                "https://www.allrecipes.com/recipe/223406/quick-savory-grilled-peaches/",
-                                "https://www.allrecipes.com/recipe/148765/real-new-orleans-style-bbq-shrimp/",
-                                "https://www.allrecipes.com/recipe/17837/four-seasons-enchiladas/",
-                                "https://www.allrecipes.com/recipe/238261/chef-johns-classic-potato-pancakes/",
-                                "https://www.allrecipes.com/recipe/14859/baba-ghanoush/",
-                                "https://www.allrecipes.com/recipe/260837/coconut-milk-hot-chocolate/"])
+urls = ["https://www.allrecipes.com/recipe/242314/browned-butter-banana-bread/",
+        "https://www.allrecipes.com/recipe/6788/amish-white-bread/",
+        "https://www.allrecipes.com/recipe/17644/german-chocolate-cake-iii/",
+        "https://www.allrecipes.com/recipe/223406/quick-savory-grilled-peaches/",
+        "https://www.allrecipes.com/recipe/148765/real-new-orleans-style-bbq-shrimp/",
+        "https://www.allrecipes.com/recipe/17837/four-seasons-enchiladas/",
+        "https://www.allrecipes.com/recipe/238261/chef-johns-classic-potato-pancakes/",
+        "https://www.allrecipes.com/recipe/14859/baba-ghanoush/",
+        "https://www.allrecipes.com/recipe/260837/coconut-milk-hot-chocolate/",
+        "https://www.allrecipes.com/recipe/8722/mexican-chicken-i/",
+        "https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/"]
+##for url in urls:
+##    m = make_recipe(url)
 
 #test2_get_steps("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
 #print make_recipe("https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/")
