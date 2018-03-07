@@ -17,6 +17,7 @@ vegan_substitutes['sugar'] = 'beet sugar'
 vegan_substitutes['chocolate'] = 'non-dairy vegan chocolate bar'
 vegan_substitutes['ice cream'] = 'non-dairy vegan ice-cream'
 vegan_substitutes['meat'] = 'beans'
+vegan_substitutes['pork'] = 'tofu'
 
 # define vegan to meat substitutes
 
@@ -54,7 +55,7 @@ healthy_grains = ['brown rice', 'wild rice', 'whole wheat pasta', 'buckwheat', '
 unhealthy_grains = ['white rice', 'pasta', 'macaroni', 'noodles', 'spaghetti']
 
 healthy_substitutes = [healthy_protein, healthy_fats, healthy_dairy, healthy_sugars, healthy_salts, healthy_grains]
-unhealthy_ingredients = [unhealthy_protein, unhealthy_fats, unhealthy_dairy, unhealthy_sugars, unhealthy_salts,
+unhealthy_substitutes = [unhealthy_protein, unhealthy_fats, unhealthy_dairy, unhealthy_sugars, unhealthy_salts,
                          unhealthy_grains]
 
 reduction_substitutes = []
