@@ -1,10 +1,24 @@
 from bs4 import BeautifulSoup
 import urllib2
 import csv
+import pickle
+
+def getPage(url):
+    address = url.replace('/','_').replace(':','_').replace('.','_').replace(',','_')
+    try:
+        return pickle.load(open("pickledURLs/"+address+".p","rb"))
+    except:
+        opener = urllib2.build_opener(urllib2.HTTPHandler)
+        opener.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36')]
+        page = opener.open(url).read()
+        print "Saving ",url
+        pickle.dump(page, open("pickledURLs/"+address+".p","wb"))
+        return page
 
 #returns raw ingredients, steps, and recipe name from URL
 def scrapeRecipe(url):
-    document = urllib2.urlopen(url).read()
+##    document = urllib2.urlopen(url).read()
+    document = getPage(url)
     soup = BeautifulSoup(document, "html.parser")
     links = soup.findAll('span')
     raw_ingredients = []
@@ -29,7 +43,8 @@ def scrapeRecipe(url):
 #returns a pretty good list of tools that Andre and I compiled from websites and hardcoding
 def scrapeTools():
     url = "https://en.wikipedia.org/wiki/List_of_food_preparation_utensils"
-    document = urllib2.urlopen(url).read()
+##    document = urllib2.urlopen(url).read()
+    document = getPage(url)
     soup = BeautifulSoup(document, "html.parser")
     headers = soup.findAll('th')
     strings = ['knife','food processor','saute pan','stock pot','brush','roasting rack','roasting pan','loaf pan','pot','pan','slow cooker','fork','spoon','skillet','whisk', "oven"]
@@ -46,6 +61,7 @@ def scrapeTools():
 
     url2 = "https://www.mealime.com/kitchen-essentials-list"
     document = urllib2.urlopen(url2).read()
+##    document = getPage(url)
     soup = BeautifulSoup(document, "html.parser")
     headers = soup.findAll('h3')
 
@@ -80,7 +96,8 @@ def scrapeFoods():
     for i in range(97,123):
         url = baseurl + chr(i)
         print url
-        document = urllib2.urlopen(url).read()
+##        document = urllib2.urlopen(url).read()
+        document = getPage(url)
         soup = BeautifulSoup(document, "html.parser")
         links = soup.findAll('li')
         for link in links:
