@@ -39,6 +39,7 @@ class Recipe:
         #swap out the ingredients for vegan substitutes
         for i in range(len(vegan_recipe.ingredients)):
             ingredient = vegan_recipe.ingredients[i].name.lower()
+            print ingredient
             for key in vegan_substitutes.keys():
                 if key in ingredient:
                     vegan_recipe.ingredients[i].name = vegan_substitutes[key]
@@ -224,13 +225,18 @@ class Recipe:
 
     ###JIMMY DOES THIS
     def change_style(self, style):
+
         pass
 
+    ###JIMMY DOES THIS
     def DIY_to_easy(self):
         pass
 
+    ###JIMMY DOES THIS
     def change_cooking_method(self, method):
         pass
+
+
     #inputs: none
     #outputs: none
     ###JIMMY DOES OUTPuTS
@@ -241,6 +247,7 @@ class Recipe:
 
         for step in self.steps:
             print step
+            print "SDFJSDLFJSDFL:KJSDF:LSKDFJ"
             input("Press Enter to continue...")
 
         return None

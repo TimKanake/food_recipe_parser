@@ -17,6 +17,7 @@ vegan_substitutes['sugar'] = 'beet sugar'
 vegan_substitutes['chocolate'] = 'non-dairy vegan chocolate bar'
 vegan_substitutes['ice cream'] = 'non-dairy vegan ice-cream'
 vegan_substitutes['meat'] = 'beans'
+vegan_substitutes['pork'] = 'tofu'
 
 # define vegan to meat substitutes
 
