@@ -39,7 +39,7 @@ def horz_list_to_str(list_in, list_name=None):
                 length_limit *= 2
                 str_out += "\n\t\t"
             str_out += x + ", "
-        str_out = str_out[:-2].capitalize() + "."
+        str_out = str_out[:-2].capitalize()
         return str_out
 
     elif list_name == "times":
