@@ -34,8 +34,7 @@ class Step:
         sentences = self.original_document.split(".")
         if "" in sentences: sentences.remove("")
         for s in sentences:
-            if s[0] == ' ':
-                s = s[1:]
+            s = s.strip()
             refined_steps.append(s)
         return refined_steps
 
