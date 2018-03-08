@@ -13,7 +13,10 @@ class Step:
 
     def __str__(self):
         p_doc = self.pretty_original_doc()
-        p_ingredients = pretty_string(self.ingredients, "ingredients", "horizontal")
+        p_ingredients = []
+        for ingredient in self.ingredients:
+            p_ingredients.append(ingredient.name)
+        p_ingredients = pretty_string(p_ingredients, "ingredients", "horizontal")
         p_tools = pretty_string(self.tools, 'tools', "horizontal")
         p_methods = pretty_string(self.methods, 'methods', "horizontal")
         p_times = pretty_string(self.times, "times", "horizontal")

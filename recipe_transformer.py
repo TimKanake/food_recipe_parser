@@ -147,11 +147,11 @@ def parse_steps2(steps, ingredients, tools, methods):
         # Ingredients
         for i in ingredients:
             if i.name in step:
-                steps_obj.ingredients.append(i.name)
+                steps_obj.ingredients.append(i)
             else:
                 for x in i.name.split(" "):
                     if x in step:
-                        steps_obj.ingredients.append(i.name)
+                        steps_obj.ingredients.append(i)
 
         # Remove duplicates from list while preserving order
         steps_obj.ingredients = list(OrderedDict.fromkeys(steps_obj.ingredients))
@@ -230,7 +230,6 @@ def test3_make_recipes_from_list(urls):
         r = make_recipe(x)
         print r
 
-# I tried to pick a good mix of recipes from the browsing section of the site: https://www.allrecipes.com/recipes/
 urls = ["https://www.allrecipes.com/recipe/242314/browned-butter-banana-bread/",
         "https://www.allrecipes.com/recipe/6788/amish-white-bread/",
         "https://www.allrecipes.com/recipe/17644/german-chocolate-cake-iii/",
@@ -242,10 +241,7 @@ urls = ["https://www.allrecipes.com/recipe/242314/browned-butter-banana-bread/",
         "https://www.allrecipes.com/recipe/260837/coconut-milk-hot-chocolate/",
         "https://www.allrecipes.com/recipe/8722/mexican-chicken-i/",
         "https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/"]
-for url in urls:
-    print make_recipe(url)
 
-#test2_get_steps("https://www.allrecipes.com/recipe/21174/bbq-pork-for-sandwiches/")
-#print make_recipe("https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/")
-#test2_get_steps("https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/")
-#test1()
+# for recipe in urls:
+#     print make_recipe(recipe)
+

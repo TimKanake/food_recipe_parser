@@ -2,6 +2,8 @@
 # reference source is http://www.vegkitchen.com/tips/vegan-substitutions/
 
 vegan_substitutes = {}
+vegan_substitutes['chicken broth'] = 'vegetable broth'
+vegan_substitutes['beef broth'] = 'vegetable broth'
 vegan_substitutes['milk'] = 'soy milk'
 vegan_substitutes['cheese'] = 'vegan cheese'
 vegan_substitutes['eggs'] = 'tofu scramble'
@@ -17,7 +19,10 @@ vegan_substitutes['sugar'] = 'beet sugar'
 vegan_substitutes['chocolate'] = 'non-dairy vegan chocolate bar'
 vegan_substitutes['ice cream'] = 'non-dairy vegan ice-cream'
 vegan_substitutes['meat'] = 'beans'
-vegan_substitutes['pork'] = 'tofu'
+vegan_substitutes['[pork'] = 'tofu'
+vegan_substitutes['duck'] = 'tofu'
+vegan_substitutes['goat'] = 'tofu'
+vegan_substitutes['liver'] = 'tofu'
 
 # define vegan to meat substitutes
 
@@ -87,6 +92,25 @@ def fix_step(step, ingredient, ratio):
 
 	return " ".join(step_words)
 
+def fix_step_2(step, old_ingredient, new_ingredient):
+	if old_ingredient in step:
+		return step.replace(old_ingredient, new_ingredient)
+	else:
+		old_ingredient_substrings = get_all_substrings(old_ingredient)
+		for i in range(len(old_ingredient_substrings)):
+			if old_ingredient_substrings[i] in step:
+				return step.replace(old_ingredient_substrings[i], new_ingredient)
+	return step
+		# create window and get strings
+
+def get_all_substrings(input_string):
+	input_string = input_string.split()
+	length = len(input_string)
+	substrings_ar = [input_string[i:j + 1] for i in xrange(length) for j in xrange(i, length)]
+	for i in range(len(substrings_ar)):
+		substrings_ar[i] = " ".join(substrings_ar[i])
+	substrings_ar.sort(lambda x, y: cmp(len(x), len(y)), reverse=True)
+	return substrings_ar
 def get_fraction(fraction):
 	return float(fraction[0]) / float(fraction[2])
 

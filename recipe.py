@@ -3,11 +3,12 @@ import random
 from pretty_string import pretty_string
 from ingredient import Ingredient
 from ingredient_substitutes import vegan_substitutes, healthy_substitutes, unhealthy_substitutes, reduction_substitutes\
-    , fix_step, non_vegan_substitutes, convert_quantity
+    , fix_step, non_vegan_substitutes, convert_quantity, fix_step_2
 from steps import Step
 
+common_meats = ['chicken', 'meat', 'beef', 'pork', 'duck', 'goat']
 class Recipe:
-    def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None, is_vegan = False):
+    def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None, is_vegan = None):
         self.name = name
         self.ingredients = ingredients
         self.steps = steps
@@ -30,40 +31,67 @@ class Recipe:
     # inputs: None
     # outputs: new Vegan Recipe
     def make_vegan(self):
+        if 'vegan' in self.name.lower():
+            print 'This is a vegan recipe'
+            self.is_vegan = True
+            return
+        for ingredient in self.ingredients:
+            for meat in common_meats:
+                if meat in ingredient.name.lower():
+                    self.is_vegan = False
+                    break
         if self.is_vegan:
-            print 'There is already a vegan recipe.'
+            print 'There are no non-vegan ingredients in this recipe.'
             return
         swapped_ingredients = {} #Keep track of swapped ingredients for substitution in steps
         vegan_recipe = copy.deepcopy(self) #deep copy our recipe object
+        vegan_recipe.name = 'Vegan ' + vegan_recipe.name
 
         #swap out the ingredients for vegan substitutes
         for i in range(len(vegan_recipe.ingredients)):
             ingredient = vegan_recipe.ingredients[i].name.lower()
-            print ingredient
-            for key in vegan_substitutes.keys():
-                if key in ingredient:
-                    vegan_recipe.ingredients[i].name = vegan_substitutes[key]
-                    swapped_ingredients[ingredient] = vegan_substitutes[key]
+            if ingredient in vegan_substitutes.keys():
+                vegan_recipe.ingredients[i].name = vegan_substitutes[ingredient]
+                swapped_ingredients[ingredient] = vegan_substitutes[ingredient]
+            else:
+                for key in vegan_substitutes.keys():
+                    if key in ingredient:
+                        vegan_recipe.ingredients[i].name = vegan_substitutes[key]
+                        swapped_ingredients[ingredient] = vegan_substitutes[key]
 
-        #fix steps based on substitutions
+        # fix steps based on substitutions
+        # print vegan_recipe
         print swapped_ingredients
         for i in range(len(vegan_recipe.steps)):
             step = vegan_recipe.steps[i].original_document
             for replacement in swapped_ingredients.keys():
-                step = step.replace(replacement, swapped_ingredients[replacement])
+                if step is not None and replacement is not None:
+                    step = fix_step_2(step, replacement, swapped_ingredients[replacement])
+                #step = step.replace(replacement, swapped_ingredients[replacement])
             vegan_recipe.steps[i].original_document = step
         vegan_recipe.is_vegan = True
         return vegan_recipe
+        #print vegan_recipe.__str__()
 
     # inputs: None
     # outputs: new non-vegan recipe
     def make_non_vegan(self):
-        if not self.is_vegan:
-            print 'This is already a non-vegan recipe.'
-            return
+        # check if recipe is already non-vegan
+        for word in self.name.lower().split():
+            if word in common_meats:
+                print 'This is already a non-vegan recipe.'
+                self.is_vegan = False
+                return
+        for ingredient in self.ingredients:
+            for meat in common_meats:
+                if meat in ingredient.name.lower():
+                    print 'This is already a non-vegan recipe.'
+                    self.is_vegan = False
+                    return
 
         swapped_ingredients = {}
         non_vegan_recipe = copy.deepcopy(self)
+        print non_vegan_recipe
 
         # swap out the ingredients for non-vegan substitutes
         for i in range(len(non_vegan_recipe.ingredients)):
@@ -75,15 +103,14 @@ class Recipe:
 
         # fix steps based on substitutions
         print swapped_ingredients
-        for i in range(len(non_vegan_recipe.steps)):
-            step = non_vegan_recipe.steps[i]
-            for replacement in swapped_ingredients.keys():
-                step = step.replace(replacement, swapped_ingredients[replacement])
-            non_vegan_recipe.steps[i].original_document = step
-        non_vegan_recipe.is_vegan = False
+        if len(swapped_ingredients) != 0:
+            for i in range(len(non_vegan_recipe.steps)):
+                step = non_vegan_recipe.steps[i]
+                for replacement in swapped_ingredients.keys():
+                    step = fix_step_2(step, replacement, swapped_ingredients[replacement])
+                non_vegan_recipe.steps[i].original_document = step
+            non_vegan_recipe.is_vegan = False
         return non_vegan_recipe
-
-
 
     #inputs: percent we want to reduce unhealthy ingredients (int)
     #outputs: new healthier recipe
@@ -115,6 +142,7 @@ class Recipe:
                                                                          healthy_recipe.ingredients[i].measurement, healthy_recipe.ingredients[i].descriptors))
                             reduced_ingredients[ingredient] = [reduction_substitutes[j].substitute, True, reduction_substitutes[j].ratio, reduction_substitutes[j].additional_ingredient]
                         break
+            print reduced_ingredients
             if len(reduced_ingredients) == 0:
                 print 'There are no secondary ingredients to reduce, making recipe healthier by substituting' \
                       ' unhealthy ingredients \n \n'
@@ -123,9 +151,8 @@ class Recipe:
                 for i in range(len(healthy_recipe.steps)):
                     step = healthy_recipe.steps[i].original_document
                     for reduced in reduced_ingredients.keys():
-                        print reduced
                         if reduced_ingredients[reduced][1]:
-                            step = step.replace(reduced, reduced_ingredients[reduced][0])
+                            step = fix_step_2(step, reduced, reduced_ingredients[reduced][0])
                             if reduced not in prepared_ingredients:
                                 preparation_steps.append(Step(
                                     original_document='Mix the ' + reduced + ' with the ' + reduced_ingredients[reduced][
@@ -153,15 +180,15 @@ class Recipe:
         print swapped_ingredients
         if len(swapped_ingredients) == 0:
             print 'There are no unhealthy ingredients that we can find a healthy subtitute for. Please try another' \
-                  ' option of making the recipe healthier.'
+                  ' option of making the recipe healthier. If you had tried other options, this recipe is as healthy' \
+                  'as it can be.'
         else:
             for i in range(len(healthy_recipe.steps)):
                 step = healthy_recipe.steps[i].original_document
                 for substitute in swapped_ingredients.keys():
-                    step = step.replace(substitute, swapped_ingredients[substitute])
-                healthy_recipe.steps[i].original_document = step
-            print self
-            return healthy_recipe
+                    step = fix_step_2(step, substitute, swapped_ingredients[substitute])
+                    # step = step.replace(substitute, swapped_ingredients)
+        return healthy_recipe
 
     def make_unhealthy(self):
         choice = input('Choose one of the following options to make your recipe unhealthier: (1) Substitute healthy'
@@ -218,10 +245,10 @@ class Recipe:
             for i in range(len(unhealthy_recipe.steps)):
                 step = unhealthy_recipe.steps[i].original_document
                 for substitute in swapped_ingredients.keys():
-                    step = step.replace(substitute, swapped_ingredients[substitute])
+                    step = fix_step_2(step, substitute, swapped_ingredients[substitute])
+                    # step = step.replace(substitute, swapped_ingredients[substitute])
                 unhealthy_recipe.steps[i].original_document = step
-            # print self
-            return unhealthy_recipe
+        return unhealthy_recipe
 
     ###JIMMY DOES THIS
     def change_style(self, style):
@@ -247,7 +274,6 @@ class Recipe:
 
         for step in self.steps:
             print step
-            print "SDFJSDLFJSDFL:KJSDF:LSKDFJ"
-            input("Press Enter to continue...")
+            raw_input("Press Enter to continue...")
 
         return None
