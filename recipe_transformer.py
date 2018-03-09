@@ -242,6 +242,5 @@ urls = ["https://www.allrecipes.com/recipe/242314/browned-butter-banana-bread/",
         "https://www.allrecipes.com/recipe/8722/mexican-chicken-i/",
         "https://www.allrecipes.com/recipe/260463/italian-chicken-cacciatore/"]
 
-# for recipe in urls:
-#     print make_recipe(recipe)
+# test3_make_recipes_from_list(urls)
 

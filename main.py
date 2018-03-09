@@ -24,7 +24,6 @@ def main():
 
 
     recipe = make_recipe(url)
-
     if function == "make_vegan":
         print "reaches here"
         recipe.make_vegan().display_recipe()
@@ -37,6 +36,7 @@ def main():
     elif function == "change_style":
         recipe.change_style(function_param).display_recipe()
     elif function == "DIY_to_easy":
+        print "reaches here"
         recipe.DIY_to_easy().display_recipe()
     elif function == "change_cooking_method":
         recipe.change_cooking_method(function_param).display_recipe()

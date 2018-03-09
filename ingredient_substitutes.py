@@ -79,6 +79,7 @@ def initialize_reduction_substitutes():
 	reduction_substitutes.append(Ingredient_Substitute('salt', 'salt', None, .5))
 	reduction_substitutes.append(Ingredient_Substitute('butter', 'mixed butter and unsweetened apple sauce', 'unsweetened apple sauce', .5))
 	reduction_substitutes.append(Ingredient_Substitute('cheese', 'cheese', None, .5))
+	reduction_substitutes.append(Ingredient_Substitute('olive oil', 'canola oil', None, 1))
 
 def fix_step(step, ingredient, ratio):
 	step_words = step.split(' ')

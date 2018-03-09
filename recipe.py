@@ -1,5 +1,6 @@
 import copy
 import random
+import math
 from pretty_string import pretty_string
 from ingredient import Ingredient
 from ingredient_substitutes import vegan_substitutes, healthy_substitutes, unhealthy_substitutes, reduction_substitutes\
@@ -73,7 +74,6 @@ class Recipe:
             vegan_recipe.steps[i].original_document = step
         vegan_recipe.is_vegan = True
         return vegan_recipe
-
     # inputs: None
     # outputs: new non-vegan recipe
     def make_non_vegan(self):
@@ -203,7 +203,7 @@ class Recipe:
 
     def make_unhealthy(self):
         choice = input('Choose one of the following options to make your recipe unhealthier: (1) Substitute healthy'
-                       'ingredients with unhealthier ingredients, (2) Increase amount of secondary unhealthy ingredients, (3)' \
+                       ' ingredients with unhealthier ingredients, (2) Increase amount of secondary unhealthy ingredients, (3)' \
                        'Change cooking method. Enter your choice by pressing 1, 2 or 3:  ')
 
         unhealthy_recipe = copy.deepcopy(self)
@@ -211,7 +211,7 @@ class Recipe:
             # TO IMPLEMENT
             pass
         elif choice == 2:
-            # choice 2: Reduce Quantity of Some Ingredients
+            # choice 2: Increase Quantity of Some Ingredients
             increased_ingredients = {}
             for i in range(len(unhealthy_recipe.ingredients)):
                 ingredient = unhealthy_recipe.ingredients[i].name.lower()
@@ -227,7 +227,7 @@ class Recipe:
                       ' healthy ingredients \n \n'
                 pass
             else:
-                print increased_ingredients
+                print 'These amount of these ingredients was increased: ', increased_ingredients
                 for i in range(len(unhealthy_recipe.steps)):
                     step = unhealthy_recipe.steps[i].original_document
                     for increased in increased_ingredients.keys():
@@ -248,11 +248,11 @@ class Recipe:
                         swapped_ingredients[ingredient] = substitute
                         break
 
-        print swapped_ingredients
         if len(swapped_ingredients) == 0:
             print 'There are no unhealthy ingredients that we can find a healthy subtitute for. Please try another' \
                   ' option of making the recipe healthier.'
         else:
+            print 'These healthy ingredients were swapped with their unhealthy equivalents: ', swapped_ingredients
             for i in range(len(unhealthy_recipe.steps)):
                 step = unhealthy_recipe.steps[i].original_document
                 for substitute in swapped_ingredients.keys():
@@ -261,22 +261,92 @@ class Recipe:
                     unhealthy_recipe.steps[i].original_document = step
         return unhealthy_recipe
 
+
     ###JIMMY DOES THIS
     def change_style(self, style):
+        transformed_recipe = copy.deepcopy(self)
+        if style == "cajun":
+            ingredient = Ingredient("cajun seasoning", "1", "pinch", ["tasty", "zesty", "cajun"], "")
+            transformed_recipe.ingredients.append(ingredient)
+            step = Step(len(transformed_recipe.steps), ingredient, [], [], [], "Add pinch of cajun seasoning on top to your personal preference")
+            transformed_recipe.steps.append(step)
 
-        pass
+            # swap ingredients
+        if style == "asian":
+            swapped = False
+            # swap salt for soy sauce
+            for j in range(len(transformed_recipe.ingredients)):
+                ingredient = transformed_recipe.ingredients[j].name.lower()
+                if 'salt' in ingredient:
+                    substitute = 'soy sauce'
+                    transformed_recipe.ingredients[j].name = substitute
+                    transformed_recipe.ingredients[j].quantity = convert_quantity(transformed_recipe.ingredients[j].quantity) * 3
+                    swapped = True
+                    break
+
+            # adjust steps
+            if not swapped:
+                print 'Cannot transform this recipe to asian cuisine'
+            else:
+                for i in range(len(transformed_recipe.steps)):
+                    step = transformed_recipe.steps[i].original_document
+                    step = fix_step_2(step, 'salt', 'soy sauce')
+                    transformed_recipe.steps[i].original_document = step
+
+
+        return transformed_recipe
 
     ###JIMMY DOES THIS
     def DIY_to_easy(self):
-        pass
+        transformed_recipe = copy.deepcopy(self)
+        ingredients = self.ingredients
+        num_ingredients = len(ingredients)
+        removed_ingredients = []
+        num_removed = math.floor(num_ingredients * 0.25)
+        count = 0
+
+        ingredient_dict = {}
+        for i in range(len(ingredients)):
+            amount = float('inf')
+            ingredient = ingredients[i]
+            measurement = ingredient.measurement
+            quantity = convert_quantity(ingredient.quantity)
+            if measurement == 'tablespoon':
+                amount = 3 * quantity
+            if measurement == 'teaspoon':
+                amount = quantity
+            if measurement == 'pinch':
+                amount = 0.5 * quantity
+            if measurement == 'gram':
+                amount = 0.22 * quantity
+
+
+            ingredient_dict[ingredients[i].name] = amount
+        for key, value in sorted(ingredient_dict.iteritems(), key = lambda(k, v): (v, k)):
+            if count >= num_removed:
+                break
+            else:
+                for ingredient in transformed_recipe.ingredients:
+                    if ingredient.name == key:
+                        transformed_recipe.ingredients.remove(ingredient)
+                        removed_ingredients.append(key)
+            count += 1
+
+        print 'These ingredients were removed: ', removed_ingredients
+
+        return transformed_recipe
+
+
 
     ###JIMMY DOES THIS
-    def change_cooking_method(self, method):
+    def change_cooking_method(self, original_method, new_method):
+        transformed_recipe = copy.deepcopy(self)
+        for i in range(len(transformed_recipe.steps)):
+            step = transformed_recipe.steps[i].original_document
+            step = fix_step_2(step, original_method, new_method)
+            transformed_recipe.steps[i].original_document = step
         pass
 
-
-    #inputs: none
-    #outputs: none
     ###JIMMY DOES OUTPuTS
     def display_recipe(self):
         print "These are the ingredients you will need: "
