@@ -6,7 +6,8 @@ from ingredient_substitutes import vegan_substitutes, healthy_substitutes, unhea
     , fix_step, non_vegan_substitutes, convert_quantity, fix_step_2
 from steps import Step
 
-common_meats = ['chicken', 'meat', 'beef', 'pork', 'duck', 'goat']
+common_meats = ['chicken', 'meat', 'beef', 'pork', 'duck', 'goat', 'lamb', 'steak']
+baked_recipe_words = ['cake', 'donut', 'muffin', 'bread']
 class Recipe:
     def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None, is_vegan = None):
         self.name = name
@@ -31,23 +32,21 @@ class Recipe:
     # inputs: None
     # outputs: new Vegan Recipe
     def make_vegan(self):
-        if 'vegan' in self.name.lower():
+        # if recipe name has vegan, then recipe is already vegan
+        if 'vegan' in self.name.lower() or self.is_vegan:
             print 'This is a vegan recipe'
             self.is_vegan = True
-            return
+            return self
         for ingredient in self.ingredients:
             for meat in common_meats:
                 if meat in ingredient.name.lower():
                     self.is_vegan = False
                     break
-        if self.is_vegan:
-            print 'There are no non-vegan ingredients in this recipe.'
-            return
-        swapped_ingredients = {} #Keep track of swapped ingredients for substitution in steps
-        vegan_recipe = copy.deepcopy(self) #deep copy our recipe object
+        swapped_ingredients = {} # Keep track of swapped ingredients for substitution in steps
+        vegan_recipe = copy.deepcopy(self) # deep copy our recipe object
         vegan_recipe.name = 'Vegan ' + vegan_recipe.name
 
-        #swap out the ingredients for vegan substitutes
+        # swap out the ingredients for vegan substitutes
         for i in range(len(vegan_recipe.ingredients)):
             ingredient = vegan_recipe.ingredients[i].name.lower()
             if ingredient in vegan_substitutes.keys():
@@ -59,29 +58,25 @@ class Recipe:
                         vegan_recipe.ingredients[i].name = vegan_substitutes[key]
                         swapped_ingredients[ingredient] = vegan_substitutes[key]
 
+        if len(swapped_ingredients) == 0:
+            print 'There were no non-vegan ingredients to begin with. This recipe is vegan.'
+            vegan_recipe.is_vegan = True
+            return vegan_recipe
+
         # fix steps based on substitutions
-        # print vegan_recipe
-        print swapped_ingredients
+        print 'These non-vegan ingredients were swapped :', swapped_ingredients
         for i in range(len(vegan_recipe.steps)):
             step = vegan_recipe.steps[i].original_document
             for replacement in swapped_ingredients.keys():
                 if step is not None and replacement is not None:
                     step = fix_step_2(step, replacement, swapped_ingredients[replacement])
-                #step = step.replace(replacement, swapped_ingredients[replacement])
             vegan_recipe.steps[i].original_document = step
         vegan_recipe.is_vegan = True
         return vegan_recipe
-        #print vegan_recipe.__str__()
 
     # inputs: None
     # outputs: new non-vegan recipe
     def make_non_vegan(self):
-        # check if recipe is already non-vegan
-        for word in self.name.lower().split():
-            if word in common_meats:
-                print 'This is already a non-vegan recipe.'
-                self.is_vegan = False
-                return
         for ingredient in self.ingredients:
             for meat in common_meats:
                 if meat in ingredient.name.lower():
@@ -91,7 +86,6 @@ class Recipe:
 
         swapped_ingredients = {}
         non_vegan_recipe = copy.deepcopy(self)
-        print non_vegan_recipe
 
         # swap out the ingredients for non-vegan substitutes
         for i in range(len(non_vegan_recipe.ingredients)):
@@ -101,24 +95,33 @@ class Recipe:
                     non_vegan_recipe.ingredients[i].name = non_vegan_substitutes[key]
                     swapped_ingredients[ingredient] = non_vegan_substitutes[key]
 
-        # fix steps based on substitutions
-        print swapped_ingredients
-        if len(swapped_ingredients) != 0:
-            for i in range(len(non_vegan_recipe.steps)):
-                step = non_vegan_recipe.steps[i]
-                for replacement in swapped_ingredients.keys():
-                    step = fix_step_2(step, replacement, swapped_ingredients[replacement])
-                non_vegan_recipe.steps[i].original_document = step
+        if len(swapped_ingredients) == 0:
+            print 'There were no vegan ingredients that can be substituted in this recipe.'
             non_vegan_recipe.is_vegan = False
+            return non_vegan_recipe
+
+        # fix steps based on substitutions
+        print 'These vegan ingredients were swapped: ', swapped_ingredients
+        for i in range(len(non_vegan_recipe.steps)):
+            step = non_vegan_recipe.steps[i].original_document
+            for replacement in swapped_ingredients.keys():
+                step = fix_step_2(step, replacement, swapped_ingredients[replacement])
+            non_vegan_recipe.steps[i].original_document = step
+        non_vegan_recipe.is_vegan = False
         return non_vegan_recipe
 
-    #inputs: percent we want to reduce unhealthy ingredients (int)
-    #outputs: new healthier recipe
-    ###TIM DOES THIS
+    #inputs: percent we want to reduce unh
     def make_healthy(self):
-        choice = input('Choose one of the following options to make your recipe healthier: (1) Substitute unhealthy'
-         'ingredients with healthier ingredients, (2) Reduce amount of secondary unhealthy ingredients, (3)'\
-          'Change cooking method. Enter your choice by pressing 1, 2 or 3:  ')
+        choice = 0
+        is_cake = False
+        for word in baked_recipe_words:
+            if word in self.name.lower():
+                is_cake = True
+                choice = 2
+        if choice == 0:
+            choice = input('Choose one of the following options to make your recipe healthier: (1) Substitute unhealthy'
+             'ingredients with healthier ingredients, (2) Reduce amount of secondary unhealthy ingredients, (3)'\
+              'Change cooking method. Enter your choice by pressing 1, 2 or 3:  ')
 
         healthy_recipe = copy.deepcopy(self)
         preparation_steps = list()
@@ -131,9 +134,15 @@ class Recipe:
             reduced_ingredients = {}
             for i in range(len(healthy_recipe.ingredients)):
                 ingredient = healthy_recipe.ingredients[i].name.lower()
-                for j in range(len(reduction_substitutes)):
+                stop = len(reduction_substitutes)
+                if is_cake:
+                    stop = 2
+                for j in range(stop):
                     if reduction_substitutes[j].name in ingredient:
-                        if reduction_substitutes[j].additional_ingredient is None: #salt reduce by half
+                        # if recipe is for cake, only reduce on thing
+                        if len(reduced_ingredients) > 0 and is_cake:
+                            break
+                        if reduction_substitutes[j].additional_ingredient is None:
                             reduced_ingredients[ingredient] = [ingredient, False, reduction_substitutes[j].ratio]
                             healthy_recipe.ingredients[i].quantity = convert_quantity(healthy_recipe.ingredients[i].quantity) * reduction_substitutes[j].ratio
                         else:
@@ -142,12 +151,12 @@ class Recipe:
                                                                          healthy_recipe.ingredients[i].measurement, healthy_recipe.ingredients[i].descriptors))
                             reduced_ingredients[ingredient] = [reduction_substitutes[j].substitute, True, reduction_substitutes[j].ratio, reduction_substitutes[j].additional_ingredient]
                         break
-            print reduced_ingredients
             if len(reduced_ingredients) == 0:
                 print 'There are no secondary ingredients to reduce, making recipe healthier by substituting' \
                       ' unhealthy ingredients \n \n'
                 pass
             else:
+                print 'These ingredients were reduced: ', reduced_ingredients
                 for i in range(len(healthy_recipe.steps)):
                     step = healthy_recipe.steps[i].original_document
                     for reduced in reduced_ingredients.keys():
@@ -156,13 +165,15 @@ class Recipe:
                             if reduced not in prepared_ingredients:
                                 preparation_steps.append(Step(
                                     original_document='Mix the ' + reduced + ' with the ' + reduced_ingredients[reduced][
-                                        3] + ' in a bowl.', tools=['bowl']))
+                                        3] + ' in a bowl.', tools= ['bowl'], ingredients = [Ingredient(name = reduced),
+                                                                                           Ingredient(name = reduced_ingredients[reduced])], number='preparation'))
                                 prepared_ingredients.append(reduced)
+                            # append ingredient to step ingredients list
+                            healthy_recipe.steps[i].ingredients.append(Ingredient(name=reduced_ingredients[reduced][0]))
                         else:
                             step = fix_step(step, reduced, reduced_ingredients[reduced][2])
                     healthy_recipe.steps[i].original_document = step
                 healthy_recipe.steps = preparation_steps + healthy_recipe.steps
-                # print self
                 return healthy_recipe
         #choice 1 and DEFAULT: Substitute Ingredients
         swapped_ingredients = {}
@@ -177,17 +188,17 @@ class Recipe:
                         swapped_ingredients[ingredient] = substitute
                         break
 
-        print swapped_ingredients
         if len(swapped_ingredients) == 0:
             print 'There are no unhealthy ingredients that we can find a healthy subtitute for. Please try another' \
                   ' option of making the recipe healthier. If you had tried other options, this recipe is as healthy' \
                   'as it can be.'
         else:
+            print 'These ingredients were swapped: ', swapped_ingredients
             for i in range(len(healthy_recipe.steps)):
                 step = healthy_recipe.steps[i].original_document
                 for substitute in swapped_ingredients.keys():
                     step = fix_step_2(step, substitute, swapped_ingredients[substitute])
-                    # step = step.replace(substitute, swapped_ingredients)
+                healthy_recipe.steps[i].original_document = step
         return healthy_recipe
 
     def make_unhealthy(self):
@@ -247,7 +258,7 @@ class Recipe:
                 for substitute in swapped_ingredients.keys():
                     step = fix_step_2(step, substitute, swapped_ingredients[substitute])
                     # step = step.replace(substitute, swapped_ingredients[substitute])
-                unhealthy_recipe.steps[i].original_document = step
+                    unhealthy_recipe.steps[i].original_document = step
         return unhealthy_recipe
 
     ###JIMMY DOES THIS

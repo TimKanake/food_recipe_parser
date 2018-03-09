@@ -23,6 +23,7 @@ vegan_substitutes['[pork'] = 'tofu'
 vegan_substitutes['duck'] = 'tofu'
 vegan_substitutes['goat'] = 'tofu'
 vegan_substitutes['liver'] = 'tofu'
+vegan_substitutes['steak'] = 'tofu'
 
 # define vegan to meat substitutes
 
@@ -41,7 +42,7 @@ non_vegan_substitutes['sweetener'] = 'honey'
 non_vegan_substitutes['beet sugar'] = 'sugar'
 non_vegan_substitutes['non-dairy vegan chocolate bar'] = 'chocolate'
 non_vegan_substitutes['non-dairy vegan ice-cream'] = 'ice cream'
-non_vegan_substitutes['beans'] = 'meat'
+non_vegan_substitutes['beans'] = 'beef'
 
 
 # define healthy substitutes for a range of unhealthy ingredients in recipes
@@ -49,7 +50,7 @@ non_vegan_substitutes['beans'] = 'meat'
 healthy_protein = ['beans', 'peas', 'eggs', 'fish','chicken', 'tofu']
 unhealthy_protein = ['ground beef', 'beef', 'pork', 'lamb']
 healthy_fats = ['sesame oil', 'olive oil', 'sunflower oil']
-unhealthy_fats = ['butter', 'chicken fat', 'coconut oil', 'canola oil', 'margarine', 'cream', 'palm oil']
+unhealthy_fats = ['coconut oil', 'chicken fat', 'butter', 'canola oil', 'margarine', 'cream', 'palm oil']
 healthy_dairy = ['fat free milk', 'low fat milk', 'low fat cheese']
 unhealthy_dairy = ['cream cheese', 'sour cream', 'whipped cream', 'whole milk', 'butter', 'cheese']
 healthy_sugars = ['brown sugar', 'cane sugar', 'fruit juice concentrates', 'molasses', 'honey', 'maple syrup']
@@ -74,8 +75,8 @@ class Ingredient_Substitute:
 def initialize_reduction_substitutes():
 	global reduction_substitutes
 	reduction_substitutes.append(Ingredient_Substitute('fat', 'mixed fat and unsweetened apple sauce', 'unsweetened apple sauce', .5))
-	reduction_substitutes.append(Ingredient_Substitute('salt', 'salt', None, .5))
 	reduction_substitutes.append(Ingredient_Substitute('sugar', 'mixed sugar and almond extract', 'almond extract', .5))
+	reduction_substitutes.append(Ingredient_Substitute('salt', 'salt', None, .5))
 	reduction_substitutes.append(Ingredient_Substitute('butter', 'mixed butter and unsweetened apple sauce', 'unsweetened apple sauce', .5))
 	reduction_substitutes.append(Ingredient_Substitute('cheese', 'cheese', None, .5))
 
