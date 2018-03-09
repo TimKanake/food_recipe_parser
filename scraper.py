@@ -145,6 +145,26 @@ def addFoods():
         except:
             writer.writerow(['jalapeno'])
 
+def getSpices():
+    spices = {}
+    spices['Cajun & Creole'] = 'Blackened Seasoning, Cajun Seasoning, Cajun Turkey Rub, Creole Seasoning and Cajun Rub (Hot), Allspice, basil, bay leaves , black pepper , caraway seeds , cardamom seed powder , cayenne , celery seed , chives , chile peppers , Korintje cinnamon , Vietnamese cinnamon , cloves , cumin , dill seed , dill weed , garlic , gumbo file , lemon , mace , marjoram , nutmeg , onion , oregano (Mediterranean) , paprika , parsley , saffron , savory , tarragon , thyme , white pepper, yellow mustard'
+    spices['Caribbean'] = 'Adobo Lime Rub , Caribbean Spice , Caribbean Turkey Rub , Colombo Powder (Caribbean curry powder), Jamaican Jerk and Mojo Seasoning, Allspice , achiote seeds (annatto seeds) , black pepper , chile peppers , Korintje cinnamon , Vietnamese cinnamon , cloves , garlic , ginger , lime , mace , nutmeg , onion , thyme'
+    spices['Chinese'] = 'Chinese Five Spice, Korintje Cinnamon , Vietnamese cinnamon , cloves , fennel seed , ginger , hot mustard , lemongrass , Sichuan peppercorns , star anise , Tien Tsin chiles , turmeric , white pepper'
+    spices['Indian'] = 'Garam Masala , Panch Phoron , Madras Curry , Maharajah Curry , Vindaloo Curry, Tikka Masala, Anise seed , ajwain , asafoetida , bay leaf , black cardamom , black cumin, black mustard seed , black pepper , black salt, brown mustard seed , chile peppers , cinnamon , Vietnamese cinnamon , cloves , coriander , cubeb berries , cumin , dried mango , fennel seed , fenugreek leaves , fenugreek seeds , garlic , ginger , green cardamom , lemon , lime , long pepper , mace , mint , nigella , nutmeg , onion , poppy seeds , saffron , sesame seed , star anise , turmeric, white pepper'
+    spices['Italian'] = 'Italian Seasoning , Pizza Seasoning , Spaghetti Seasoning, Tuscany Bread Dipping, Basil , garlic , onion , oregano (Mediterranean) , marjoram, parsley'
+    spices['Mediterranean'] = 'Citrus Seasoning , Greek Seasoning , Herbs de Provence , Mediterranean Dry Rub, Basil , bay leaves , black caraway , black pepper , cardamom seed powder , chervil , chile peppers , chives , cilantro , cinnamon , Vietnamese cinnamon , cloves , coriander , cumin , fennel seed , fenugreek seeds , garlic , ginger , juniper , mace , marjoram , mint , nutmeg , onion , oregano (Mediterranean) , paprika , parsley , rosemary , saffron , sage , savory , tarragon , thyme , turmeric, white pepper'
+    spices['Mexican'] = 'Adobo Seasoning , Habanero Mango , Manzanillo Seasoning , Mole Seasoning, Taco Seasoning , Yucatan Recado Rojo ,Allspice , achiote seeds (annatto seeds) , basil , Mexican cinnamon , cayenne , chile peppers , cilantro , coriander , cumin , epazote , mint , nutmeg , oregano (Mexican) , sage , thyme'
+    spices['Middle Eastern'] = "Baharat , Lebanese 7 Spice , Shawarma , Za'atar , Aleppo pepper , anise seed , caraway , cardamom , cumin , maras pepper , nutmeg , sumac , turmeric"
+    spices['North African'] = 'Baharat , Berbere , Harissa , Moroccan Chicken Spice Rub , Moroccan Vegetable Rub , Piri Piri Seasoning , Ras el Hanout , Tunisian Five Spice, Birds eye chiles , cilantro , cinnamon , Vietnamese cinnamon , cubeb berries , cumin , garlic , ginger , grains of paradise , long pepper , mint , onion , saffron'
+    spices['Spanish'] = 'Paella Seasoning , Basil , bay leaf , cayenne , cinnamon , Vietnamese cinnamon , cloves , garlic , mint , nutmeg , oregano (Mediterranean) , paprika (Smoked Sweet) , parsley , rosemary , saffron , sage , tarragon , thyme , vanilla'
+    spices['Thai'] = 'Spicy Thai Seasoning , Thai Curry Seasoning, Basil , black pepper , cardamom , chile peppers , cilantro , cinnamon , Vietnamese cinnamon , cloves , cumin , garlic , ginger , lemongrass , lime , mace , mint, nutmeg , shallots , turmeric, white pepper'
+    for key in spices:
+        s = spices[key].split(',')
+        spices[key] = []
+        for a in s:
+            spices[key].append(a.split('(')[0].strip().lower())
+    return spices
+    
 def loadFoods():
     foods = []
     reader = csv.reader(open("foods.csv"))
