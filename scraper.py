@@ -108,13 +108,48 @@ def scrapeFoods():
     for food in foods:
         writer.writerow([food])
 
+def addFoods():
+    filepath = "foods.csv"
+    foods = []
+    reader = csv.reader(open(filepath))
+    for row in reader:
+        foods.append(row[0])
+    url = 'http://eatingatoz.com/food-list/'
+    document = getPage(url)
+    soup = BeautifulSoup(document, "html.parser")
+    potFoods = soup.findAll('li')
+    for f in potFoods:
+        if f.get('class') == None and f.string is not None:
+            pfood = f.string.split('(')[0].lower()
+            pfood = pfood.strip()
+            if "guancamole" in pfood:
+                pfood = 'guacamole'
+            if len(pfood) > 2:
+                if ' / ' in pfood:
+                    s = pfood.split(' / ')
+                    if s[0] not in foods:
+                        foods.append(s[0])
+                    if s[1] not in foods:
+                        foods.append(s[1])
+                elif pfood not in foods:
+                    foods.append(pfood)
+    for food in ["baking soda","tortilla","bell pepper"]:
+        if food not in foods:
+            foods.append(food)
+    if 'mince' in foods:
+        foods.remove("mince")
+    writer = csv.writer(open(filepath,'wb'))
+    for row in foods:
+        try:
+            writer.writerow([row])
+        except:
+            writer.writerow(['jalapeno'])
+
 def loadFoods():
     foods = []
     reader = csv.reader(open("foods.csv"))
     for row in reader:
         foods.append(row[0])
-    foods += ["baking soda","tortilla","bell pepper"]
-    foods.remove("mince")
     return foods
         
         
