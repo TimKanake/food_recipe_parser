@@ -190,6 +190,30 @@ def addSpices():
             writer.writerow([row])
         except:
             print row
+
+def addVeggies():
+    url = "https://www.ranker.com/crowdranked-list/the-most-delicious-vegetables-v1?utm_expid=16418821-388.pwrOe5-lSJetLqzNW0S00A.0&utm_referrer=https%3A%2F%2Fwww.google.com%2F"
+    document = getPage(url)
+    soup = BeautifulSoup(document, "html.parser")
+    potFoods = soup.findAll('a')
+    veggies = []
+    for food in potFoods:
+        if food.get('href') != None and "//www.ranker.com/review/" in food.get('href'):
+            s = food.string
+            if '/' in s:
+                s = s.split('/')[1]
+            veggies.append(s.lower())
+    foods = loadFoods()
+    for v in veggies:
+        if v not in foods:
+            foods.append(v)
+    writer = csv.writer(open("foods.csv","wb"))
+    for row in foods:
+        try:
+            writer.writerow([row])
+        except:
+            pass
+    
         
         
     
