@@ -16,14 +16,14 @@ def main(url="https://www.allrecipes.com/recipe/219963/",make_vegan=False,make_n
     elif make_unhealthy:
         recipe = recipe.make_unhealthy()
     elif change_style:
-        recipe = recipe.change_style(function_param)
+        recipe = recipe.change_style('chinese')
     elif DIY_to_easy:
         recipe.DIY_to_easy()
     elif change_cooking_method:
-        recipe = recipe.change_cooking_method(function_param)
+        recipe = recipe.change_cooking_method('bake')
         
     print recipe
 
     return
 
-main()
+main(make_unhealthy=True)

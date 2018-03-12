@@ -120,16 +120,12 @@ class Recipe:
                 choice = 2
         if choice == 0:
             choice = input('Choose one of the following options to make your recipe healthier: (1) Substitute unhealthy'
-             'ingredients with healthier ingredients, (2) Reduce amount of secondary unhealthy ingredients, (3)'\
-              'Change cooking method. Enter your choice by pressing 1, 2 or 3:  ')
+             'ingredients with healthier ingredients, (2) Reduce amount of secondary unhealthy ingredients:  ')
 
         healthy_recipe = copy.deepcopy(self)
         preparation_steps = list()
         prepared_ingredients = []
-        if choice == 3:
-            # TO IMPLEMENT
-            pass
-        elif choice == 2:
+        if choice == 2:
             # choice 2: Reduce Quantity of Some Ingredients
             reduced_ingredients = {}
             for i in range(len(healthy_recipe.ingredients)):
@@ -166,7 +162,7 @@ class Recipe:
                                 preparation_steps.append(Step(
                                     original_document='Mix the ' + reduced + ' with the ' + reduced_ingredients[reduced][
                                         3] + ' in a bowl.', tools= ['bowl'], ingredients = [Ingredient(name = reduced),
-                                                                                           Ingredient(name = reduced_ingredients[reduced])], number='preparation'))
+                                                                                           Ingredient(name = reduced_ingredients[reduced][3])], number='preparation'))
                                 prepared_ingredients.append(reduced)
                             # append ingredient to step ingredients list
                             healthy_recipe.steps[i].ingredients.append(Ingredient(name=reduced_ingredients[reduced][0]))
@@ -203,14 +199,11 @@ class Recipe:
 
     def make_unhealthy(self):
         choice = input('Choose one of the following options to make your recipe unhealthier: (1) Substitute healthy'
-                       ' ingredients with unhealthier ingredients, (2) Increase amount of secondary unhealthy ingredients, (3)' \
-                       'Change cooking method. Enter your choice by pressing 1, 2 or 3:  ')
+                       ' ingredients with unhealthier ingredients, (2) Increase amount of secondary unhealthy ingredients.'
+                       'Enter your choice by pressing 1 or 2:  ')
 
         unhealthy_recipe = copy.deepcopy(self)
-        if choice == 3:
-            # TO IMPLEMENT
-            pass
-        elif choice == 2:
+        if choice == 2:
             # choice 2: Increase Quantity of Some Ingredients
             increased_ingredients = {}
             for i in range(len(unhealthy_recipe.ingredients)):
