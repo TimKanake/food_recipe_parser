@@ -171,6 +171,25 @@ def loadFoods():
     for row in reader:
         foods.append(row[0])
     return foods
+
+def addSpices():
+    filepath = "foods.csv"
+    foods = []
+    reader = csv.reader(open(filepath))
+    for row in reader:
+        if row[0] not in foods:
+            foods.append(row[0])
+    spices = getSpices()
+    for style in spices:
+        for spice in spices[style]:
+            if spice not in foods:
+                foods.append(spice)
+    writer = csv.writer(open(filepath,'wb'))
+    for row in foods:
+        try:
+            writer.writerow([row])
+        except:
+            print row
         
         
     
