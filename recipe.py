@@ -28,7 +28,8 @@ class Recipe:
         p_tools = pretty_string(self.tools, "tools", 'horizontal')
         p_methods = pretty_string(self.method, "methods", "horizontal")
 
-        return """Recipe Name: {!s}\nIngredients: {!s}\nTools: {!s}\nMethod: {!s}\nSteps: {!s}\nNutrition {!s}""".format(self.name, ingredients_ppstring, p_tools, p_methods, steps_ppstring, self.nutrition)
+##        return """Recipe Name: {!s}\nIngredients: {!s}\nTools: {!s}\nMethod: {!s}\nSteps: {!s}\nNutrition {!s}""".format(self.name, ingredients_ppstring, p_tools, p_methods, steps_ppstring, self.nutrition)
+        return """Recipe Name: {!s}\nIngredients: {!s}\nTools: {!s}\nMethod: {!s}\nSteps: {!s}""".format(self.name, ingredients_ppstring, p_tools, p_methods, steps_ppstring)
 
     # inputs: None
     # outputs: new Vegan Recipe

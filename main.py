@@ -9,17 +9,17 @@ def main(url="https://www.allrecipes.com/recipe/219963/",make_vegan=False,make_n
     
     if make_vegan:
         recipe = recipe.make_vegan()
-    elif make_non_vegan:
+    if make_non_vegan:
         recipe = recipe.make_non_vegan()
-    elif make_healthy:
+    if make_healthy:
         recipe = recipe.make_healthy()
-    elif make_unhealthy:
+    if make_unhealthy:
         recipe = recipe.make_unhealthy()
-    elif change_style:
+    if change_style:
         recipe = recipe.change_style(function_param)
-    elif DIY_to_easy:
+    if DIY_to_easy:
         recipe.DIY_to_easy()
-    elif change_cooking_method:
+    if change_cooking_method:
         recipe = recipe.change_cooking_method(function_param)
         
     print recipe
