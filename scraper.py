@@ -66,7 +66,7 @@ def scrapeTools():
     headers = soup.findAll('h3')
 
     for h in headers:
-        if h.string.lower() no in strings:
+        if h.string.lower() not in strings:
             strings.append(h.string.lower())
             
     return strings
