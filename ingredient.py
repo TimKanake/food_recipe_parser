@@ -10,4 +10,18 @@ class Ingredient:
         return  self.quantity + " " + self.measurement + ", " + self.name + ", " + self.preparation
 
     def __str__(self):
-    	return """{0} {1} {2} {3}""".format(self.quantity, self.measurement, self.name, self.preparation)
+        toreturn = ''
+        toreturn += str(self.quantity)
+        if len(self.measurement) > 0:
+            toreturn += ' '+self.measurement
+        try:
+            for descriptor in self.descriptors:
+                toreturn += ' '+descriptor + ','
+        except:
+            print self.descriptors
+        if len(self.descriptors) > 0:
+            toreturn = toreturn[:-1]
+        toreturn += ' '+self.name
+        if len(self.preparation) > 0:
+            toreturn += ' '+self.preparation
+        return toreturn

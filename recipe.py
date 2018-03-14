@@ -5,6 +5,7 @@ from pretty_string import pretty_string
 from ingredient import Ingredient
 from ingredient_substitutes import vegan_substitutes, healthy_substitutes, unhealthy_substitutes, reduction_substitutes\
     , fix_step, non_vegan_substitutes, convert_quantity, fix_step_2
+from scraper import getSpices
 from steps import Step
 
 common_meats = ['chicken', 'meat', 'beef', 'pork', 'duck', 'goat', 'lamb', 'steak']
@@ -258,34 +259,45 @@ class Recipe:
 
     ###JIMMY DOES THIS
     def change_style(self, style):
+        spices = getSpices()
+        styles = spices.keys()
         transformed_recipe = copy.deepcopy(self)
-        if style == "cajun":
-            ingredient = Ingredient("cajun seasoning", "1", "pinch", ["tasty", "zesty", "cajun"], "")
-            transformed_recipe.ingredients.append(ingredient)
-            step = Step(len(transformed_recipe.steps), ingredient, [], [], [], "Add pinch of cajun seasoning on top to your personal preference")
-            transformed_recipe.steps.append(step)
-
-            # swap ingredients
-        if style == "asian":
-            swapped = False
-            # swap salt for soy sauce
-            for j in range(len(transformed_recipe.ingredients)):
-                ingredient = transformed_recipe.ingredients[j].name.lower()
-                if 'salt' in ingredient:
-                    substitute = 'soy sauce'
-                    transformed_recipe.ingredients[j].name = substitute
-                    transformed_recipe.ingredients[j].quantity = convert_quantity(transformed_recipe.ingredients[j].quantity) * 3
-                    swapped = True
-                    break
-
-            # adjust steps
-            if not swapped:
-                print 'Cannot transform this recipe to asian cuisine'
-            else:
-                for i in range(len(transformed_recipe.steps)):
-                    step = transformed_recipe.steps[i].original_document
-                    step = fix_step_2(step, 'salt', 'soy sauce')
-                    transformed_recipe.steps[i].original_document = step
+        fixedStyle = ''
+        for s in styles:
+            if style.lower() in s.lower():
+                fixedStyle = s
+        if fixedStyle == '' and style == 'asian':
+            fixedStyle = ["Chinese","Thai"][random.randint(0,1)]
+        
+        spice1 = spices[fixedStyle][random.randint(0,len(spices[fixedStyle])-1)]
+        spice2 = spices[fixedStyle][random.randint(0,len(spices[fixedStyle])-1)]
+        ingredient1 = Ingredient(spice1, "1", "pinch", [], "")
+        ingredient2 = Ingredient(spice2, "1", "pinch", [], "")
+        transformed_recipe.ingredients.append(ingredient1)
+        transformed_recipe.ingredients.append(ingredient2)
+        step = Step(len(transformed_recipe.steps), [ingredient1,ingredient2], [], [], [], "Add a pinch of "+spice1+" and "+spice2+" on top to your personal preference")
+        transformed_recipe.steps.append(step)
+        
+##        if style == "asian":
+##            swapped = False
+##            # swap salt for soy sauce
+##            for j in range(len(transformed_recipe.ingredients)):
+##                ingredient = transformed_recipe.ingredients[j].name.lower()
+##                if 'salt' in ingredient:
+##                    substitute = 'soy sauce'
+##                    transformed_recipe.ingredients[j].name = substitute
+##                    transformed_recipe.ingredients[j].quantity = convert_quantity(transformed_recipe.ingredients[j].quantity) * 3
+##                    swapped = True
+##                    break
+##
+##            # adjust steps
+##            if not swapped:
+##                print 'Cannot transform this recipe to asian cuisine'
+##            else:
+##                for i in range(len(transformed_recipe.steps)):
+##                    step = transformed_recipe.steps[i].original_document
+##                    step = fix_step_2(step, 'salt', 'soy sauce')
+##                    transformed_recipe.steps[i].original_document = step
 
 
         return transformed_recipe

@@ -73,7 +73,7 @@ def parse_ingredients(r_ingredients):
                 elif foundfood:
                     end = i
             if foundfood:
-                descriptor = ' '.join(split_words[counter:counter + start])
+                descriptor = split_words[counter:counter + start]
                 if end != -1:
                     preparation = ' '.join(split_words[counter + end:])
         ingredients.append(Ingredient(name, quantity, measurement, descriptor, preparation))
