@@ -52,17 +52,23 @@ def parse_ingredients(r_ingredients):
         descriptor = ''
         preparation = ''
         remaining = ' '.join(split_words[counter:])
-        longestfood = ''
+        longestfoodbc = ''
+        longestfoodac = ''
         for food in foods:
+            if food in remaining.split(',')[0].lower():
+                if len(food) > len(longestfoodbc):
+                    longestfoodbc = food
             if food in remaining.lower():
-                if len(food) > len(longestfood):
-                    longestfood = food
-        if longestfood == '':
+                if len(food) > len(longestfoodac):
+                    longestfoodac = food
+        if longestfoodac == '':
             name = remaining.split(',')[0]
             if ',' in remaining:
                 preparation = remaining.split(',')[1]
         else:
-            name = longestfood
+            name = longestfoodbc
+            if longestfoodbc == '':
+                name = longestfoodac
             foundfood = False
             end = -1
             for i,word in enumerate(split_words[counter:]):
@@ -70,7 +76,7 @@ def parse_ingredients(r_ingredients):
                     if not foundfood:
                         start = i
                     foundfood = True
-                elif foundfood:
+                elif foundfood and end == -1:
                     end = i
             if foundfood:
                 descriptor = split_words[counter:counter + start]

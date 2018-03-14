@@ -19,11 +19,13 @@ vegan_substitutes['sugar'] = 'beet sugar'
 vegan_substitutes['chocolate'] = 'non-dairy vegan chocolate bar'
 vegan_substitutes['ice cream'] = 'non-dairy vegan ice-cream'
 vegan_substitutes['meat'] = 'beans'
-vegan_substitutes['[pork'] = 'tofu'
+vegan_substitutes['pork'] = 'tofu'
 vegan_substitutes['duck'] = 'tofu'
 vegan_substitutes['goat'] = 'tofu'
 vegan_substitutes['liver'] = 'tofu'
 vegan_substitutes['steak'] = 'tofu'
+vegan_substitutes['turkey'] = 'tofu'
+vegan_substitutes['ham'] = 'tofu'
 
 # define vegan to meat substitutes
 
@@ -43,6 +45,7 @@ non_vegan_substitutes['beet sugar'] = 'sugar'
 non_vegan_substitutes['non-dairy vegan chocolate bar'] = 'chocolate'
 non_vegan_substitutes['non-dairy vegan ice-cream'] = 'ice cream'
 non_vegan_substitutes['beans'] = 'beef'
+non_vegan_substitutes['vegetable bouillon cubes'] = 'beef'
 
 
 # define healthy substitutes for a range of unhealthy ingredients in recipes
@@ -55,7 +58,7 @@ healthy_dairy = ['fat free milk', 'low fat milk', 'low fat cheese']
 unhealthy_dairy = ['cream cheese', 'sour cream', 'whipped cream', 'whole milk', 'butter', 'cheese']
 healthy_sugars = ['brown sugar', 'cane sugar', 'fruit juice concentrates', 'molasses', 'honey', 'maple syrup']
 unhealthy_sugars = ['white sugar', 'chocolate syrup', 'corn syrup', 'aspartame', 'sugar']
-healthy_salts = ['low sodium soy sauce', 'sea salt']
+healthy_salts = ['low sodium soy sauce', 'low sodium sea salt']
 unhealthy_salts = ['soy sauce', 'table salt','salt']
 healthy_grains = ['brown rice', 'wild rice', 'whole wheat pasta', 'buckwheat', 'millet']
 unhealthy_grains = ['white rice', 'pasta', 'macaroni', 'noodles', 'spaghetti']

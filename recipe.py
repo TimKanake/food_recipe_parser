@@ -8,7 +8,7 @@ from ingredient_substitutes import vegan_substitutes, healthy_substitutes, unhea
 from scraper import getSpices
 from steps import Step
 
-common_meats = ['chicken', 'meat', 'beef', 'pork', 'duck', 'goat', 'lamb', 'steak']
+common_meats = ['chicken', 'meat', 'beef', 'pork', 'duck', 'goat', 'lamb', 'steak', "turkey", "ham"]
 baked_recipe_words = ['cake', 'donut', 'muffin', 'bread']
 class Recipe:
     def __init__(self, name = None, ingredients = [], steps = [], tools = [], method = None, nutrition = None, is_vegan = None):
@@ -272,11 +272,28 @@ class Recipe:
         spice1 = spices[fixedStyle][random.randint(0,len(spices[fixedStyle])-1)]
         spice2 = spices[fixedStyle][random.randint(0,len(spices[fixedStyle])-1)]
         ingredient1 = Ingredient(spice1, "1", "pinch", [], "")
-        ingredient2 = Ingredient(spice2, "1", "pinch", [], "")
+        ingredient2 = Ingredient(spice2, "2", "pinch", [], "")
         transformed_recipe.ingredients.append(ingredient1)
         transformed_recipe.ingredients.append(ingredient2)
-        step = Step(len(transformed_recipe.steps), [ingredient1,ingredient2], [], [], [], "Add a pinch of "+spice1+" and "+spice2+" on top to your personal preference")
-        transformed_recipe.steps.append(step)
+        stirindices = []
+        for i,step in enumerate(transformed_recipe.steps):
+            for method in step.methods:
+                if "stir" == method[0] or "simmer" == method[0]:
+                    stirindices.append(i)
+            if "season" in step.original_document.lower():
+                stirindices.append(i)
+            if "flavor" in step.original_document.lower():
+                stirindices.append(i)
+            if "rub" in step.original_document.lower():
+                stirindices.append(i)
+        if len(stirindices) == 0:                  
+            step = Step(len(transformed_recipe.steps), [ingredient1,ingredient2], [], [], [], "Top with "+spice1+" and "+spice2+" to your personal preference.")
+            transformed_recipe.steps.append(step)
+        else:
+            stirindex = stirindices[random.randint(0,len(stirindices)-1)]
+            transformed_recipe.steps[stirindex].original_document += " Add in "+spice1+" and "+spice2+" to your personal preference."
+            transformed_recipe.steps[stirindex].ingredients += [ingredient1,ingredient2]
+        transformed_recipe.name = fixedStyle+" "+transformed_recipe.name
         
 ##        if style == "asian":
 ##            swapped = False
@@ -309,7 +326,7 @@ class Recipe:
         num_ingredients = len(ingredients)
         removed_ingredients = []
         removed_steps = []
-        num_removed = math.floor(num_ingredients * 0.25)
+        num_removed = math.floor(num_ingredients * 0.4)
         count = 0
 
         ingredient_dict = {}
@@ -318,15 +335,22 @@ class Recipe:
             ingredient = ingredients[i]
             measurement = ingredient.measurement
             quantity = convert_quantity(ingredient.quantity)
-            if measurement == 'tablespoon':
+            if 'tablespoon' in measurement:
                 amount = 3 * quantity
-            if measurement == 'teaspoon':
+            if 'teaspoon' in measurement:
                 amount = quantity
-            if measurement == 'pinch':
+            if 'pinch' in measurement:
                 amount = 0.5 * quantity
-            if measurement == 'gram':
+            if 'gram' in measurement:
                 amount = 0.22 * quantity
-
+            if 'cup' in measurement:
+                amount = 15 * quantity
+            if 'can' in measurement:
+                amount = 20 * quantity
+            if 'ounce' in measurement:
+                amount = 5 * quantity
+            if 'milliliter' in measurement:
+                amount = 1 * quantity
 
             ingredient_dict[ingredients[i].name] = amount
         for key, value in sorted(ingredient_dict.iteritems(), key = lambda(k, v): (v, k)):
@@ -337,6 +361,16 @@ class Recipe:
                     if ingredient.name == key:
                         transformed_recipe.ingredients.remove(ingredient)
                         removed_ingredients.append(key)
+                        for i,step in enumerate(transformed_recipe.steps):
+                            for ing in step.ingredients:
+                                if key == ing.name:
+                                    step.ingredients.remove(ing)
+                                    sentences = step.original_document.split('.')
+                                    sentences.remove('')
+                                    for sentence in sentences:
+                                        if key in sentence:
+                                            sentences.remove(sentence)
+                                    transformed_recipe.steps[i].original_document = '. '.join(sentences)+'.'
                 #for step in transformed_recipe.steps:
                     #if len(step.ingredients) == 0:
  #                       print step
@@ -348,7 +382,12 @@ class Recipe:
 
         #print 'Count: ' + count
         #print 'Num Removed: ' + count
-        print 'These ingredients were removed: ', removed_ingredients
+        removedstring = ''
+        for ingredient in removed_ingredients:
+            removedstring += ingredient+', '
+        if len(removedstring) > 0:
+            removedstring = removedstring[:-2]
+        print 'These ingredients were removed: ', removedstring
 
         return transformed_recipe
 

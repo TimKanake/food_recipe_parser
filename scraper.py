@@ -11,7 +11,7 @@ def getPage(url):
         opener = urllib2.build_opener(urllib2.HTTPHandler)
         opener.addheaders = [('User-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36')]
         page = opener.open(url).read()
-        print "Saving ",url
+##        print "Saving ",url
         pickle.dump(page, open("pickledURLs/"+address+".p","wb"))
         return page
 
@@ -95,7 +95,7 @@ def scrapeFoods():
     foods = []
     for i in range(97,123):
         url = baseurl + chr(i)
-        print url
+##        print url
 ##        document = urllib2.urlopen(url).read()
         document = getPage(url)
         soup = BeautifulSoup(document, "html.parser")
@@ -189,7 +189,8 @@ def addSpices():
         try:
             writer.writerow([row])
         except:
-            print row
+##            print row
+            pass
 
 def addVeggies():
     url = "https://www.ranker.com/crowdranked-list/the-most-delicious-vegetables-v1?utm_expid=16418821-388.pwrOe5-lSJetLqzNW0S00A.0&utm_referrer=https%3A%2F%2Fwww.google.com%2F"
