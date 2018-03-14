@@ -296,6 +296,7 @@ class Recipe:
         ingredients = self.ingredients
         num_ingredients = len(ingredients)
         removed_ingredients = []
+        removed_steps = []
         num_removed = math.floor(num_ingredients * 0.25)
         count = 0
 
@@ -324,8 +325,17 @@ class Recipe:
                     if ingredient.name == key:
                         transformed_recipe.ingredients.remove(ingredient)
                         removed_ingredients.append(key)
+                #for step in transformed_recipe.steps:
+                    #if len(step.ingredients) == 0:
+ #                       print step
+##                        transformed_recipe.steps.remove(step)
+                #for step in removed_step:
+                #    transformed_recipe.steps.remove(step)
+                        
             count += 1
 
+        #print 'Count: ' + count
+        #print 'Num Removed: ' + count
         print 'These ingredients were removed: ', removed_ingredients
 
         return transformed_recipe
