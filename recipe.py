@@ -366,7 +366,8 @@ class Recipe:
                                 if key == ing.name:
                                     step.ingredients.remove(ing)
                                     sentences = step.original_document.split('.')
-                                    sentences.remove('')
+                                    if '' in sentences:
+                                        sentences.remove('')
                                     for sentence in sentences:
                                         if key in sentence:
                                             sentences.remove(sentence)
