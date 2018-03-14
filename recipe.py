@@ -361,7 +361,10 @@ class Recipe:
             step = transformed_recipe.steps[i].original_document
             step = fix_step_2(step, original_method, new_method)
             transformed_recipe.steps[i].original_document = step
-        pass
+            for j in range(0,len(transformed_recipe.steps[i].methods)):
+                if transformed_recipe.steps[i].methods[j][0] == original_method:
+                    transformed_recipe.steps[i].methods[j] = (new_method,transformed_recipe.steps[i].methods[j][1])
+        return transformed_recipe
 
     ###JIMMY DOES OUTPuTS
     def display_recipe(self):
