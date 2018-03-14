@@ -326,7 +326,7 @@ class Recipe:
         num_ingredients = len(ingredients)
         removed_ingredients = []
         removed_steps = []
-        num_removed = math.floor(num_ingredients * 0.4)
+        num_removed = math.floor(num_ingredients * 0.45)
         count = 0
 
         ingredient_dict = {}
@@ -371,7 +371,10 @@ class Recipe:
                                     for sentence in sentences:
                                         if key in sentence:
                                             sentences.remove(sentence)
-                                    transformed_recipe.steps[i].original_document = '. '.join(sentences)+'.'
+                                    if sentences != []:
+                                        transformed_recipe.steps[i].original_document = '. '.join(sentences)+'.'
+                                    else:
+                                        transformed_recipe.steps.remove(transformed_recipe.steps[i])
                 #for step in transformed_recipe.steps:
                     #if len(step.ingredients) == 0:
  #                       print step

@@ -16,7 +16,9 @@ class Ingredient:
             toreturn += ' '+self.measurement
         try:
             for descriptor in self.descriptors:
-                toreturn += ' '+descriptor + ','
+                toreturn += ' '+descriptor
+                if ',' not in descriptor:
+                    toreturn += ','
         except:
             print self.descriptors
         if len(self.descriptors) > 0:

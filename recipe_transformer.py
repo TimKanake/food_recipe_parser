@@ -83,6 +83,7 @@ def parse_ingredients(r_ingredients):
                 if end != -1:
                     preparation = ' '.join(split_words[counter + end:])
         ingredients.append(Ingredient(name, quantity, measurement, descriptor, preparation))
+##        print name, '|', quantity, '|', measurement, '|', descriptor, '|', preparation
     return ingredients
 
 ###DAN AND ANDRE DO THIS

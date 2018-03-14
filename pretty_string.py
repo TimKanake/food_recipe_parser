@@ -21,7 +21,7 @@ def horz_list_to_str(list_in, list_name=None):
             str_out = list_in[0][0]
         if len(list_in) > 1:
             str_out += ', ' + list_in[1][0]
-        return str_out
+        return str_out.capitalize()
 
     elif list_name == "tools":
         if len(list_in) > 0:
@@ -30,7 +30,7 @@ def horz_list_to_str(list_in, list_name=None):
                 for tool in list_in[1:]:
                     if tool[0] not in str_out:
                         str_out += ', ' + tool[0]
-        return str_out
+        return str_out.capitalize()
 
     elif list_name == "ingredients":
         length_limit = 79
