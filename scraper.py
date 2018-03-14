@@ -47,7 +47,7 @@ def scrapeTools():
     document = getPage(url)
     soup = BeautifulSoup(document, "html.parser")
     headers = soup.findAll('th')
-    strings = ['knife','food processor','saute pan','stock pot','brush','roasting rack','roasting pan','loaf pan','pot','pan','slow cooker','fork','spoon','skillet','whisk', "oven"]
+    strings = ['baking dish','knife','food processor','saute pan','stock pot','brush','roasting rack','roasting pan','loaf pan','pot','pan','slow cooker','fork','spoon','skillet','whisk', "oven"]
     for h in headers:
         if h.get('scope') == "row" and (h.get('class') == None or "navbox-group" not in h.get('class')):
             s = h.string
@@ -56,7 +56,7 @@ def scrapeTools():
                     s = h.a.string
                 except:
                     pass
-            if s != None:
+            if s != None and s.lower() not in strings:
                 strings.append(s.lower())
 
     url2 = "https://www.mealime.com/kitchen-essentials-list"
@@ -66,8 +66,9 @@ def scrapeTools():
     headers = soup.findAll('h3')
 
     for h in headers:
-        strings.append(h.string.lower())
-
+        if h.string.lower() no in strings:
+            strings.append(h.string.lower())
+            
     return strings
 
 #returns a pretty good list of cooking methods, hardcoded completely for now
