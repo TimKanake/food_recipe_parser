@@ -119,8 +119,19 @@ def fix_step(step, ingredient, ratio):
 	return " ".join(step_words)
 
 def fix_step_2(step, old_ingredient, new_ingredient):
-	if old_ingredient in step:
-		return step.replace(old_ingredient, new_ingredient)
+	if old_ingredient in step.lower():
+		s = step.lower().replace(old_ingredient, new_ingredient)
+		capital = False
+		for i in range(0,len(s)):
+                        if s[i].isalpha() and not capital:
+                                capital = True
+                                try:
+                                        s = s[:i]+s[i].upper()+s[i+1:]
+                                except:
+                                        pass
+                        if s[i] == '.':
+                                capital = False
+                return s
 	else:
 		old_ingredient_substrings = get_all_substrings(old_ingredient)
 		for i in range(len(old_ingredient_substrings)):
