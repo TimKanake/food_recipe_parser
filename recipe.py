@@ -265,7 +265,7 @@ class Recipe:
         for s in styles:
             if style.lower() in s.lower():
                 fixedStyle = s
-        if fixedStyle == '' and style == 'asian':
+        if fixedStyle == '' and style.lower() == 'asian':
             fixedStyle = ["Chinese","Thai"][random.randint(0,1)]
         
         spice1 = spices[fixedStyle][random.randint(0,len(spices[fixedStyle])-1)]
