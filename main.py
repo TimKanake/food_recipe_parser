@@ -4,7 +4,7 @@ from recipe_transformer import make_recipe
 def usage():
     print "python main.py url"
 
-def main(url="https://www.allrecipes.com/recipe/21736/",make_vegan=False,make_non_vegan=False,make_healthy=False,make_unhealthy=False,change_style=True,style="Mexican",DIY_to_easy=True,change_cooking_method=False,method=("heat","fry")):
+def main(url="https://www.allrecipes.com/recipe/21736/",make_vegan=True,make_non_vegan=False,make_healthy=False,make_unhealthy=False,change_style=True,style="Mexican",DIY_to_easy=True,change_cooking_method=False,method=("heat","fry")):
     recipe = make_recipe(url)
     
     if make_vegan:

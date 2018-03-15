@@ -383,6 +383,8 @@ class Recipe:
                 #    transformed_recipe.steps.remove(step)
                         
             count += 1
+        
+        transformed_recipe.name = "Easy "+transformed_recipe.name
 
         #print 'Count: ' + count
         #print 'Num Removed: ' + count

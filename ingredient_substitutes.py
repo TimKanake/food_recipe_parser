@@ -27,6 +27,27 @@ vegan_substitutes['steak'] = 'tofu'
 vegan_substitutes['turkey'] = 'tofu'
 vegan_substitutes['ham'] = 'tofu'
 
+vegan_substitutes['bass'] = 'tofu'
+vegan_substitutes['catfish'] = 'tofu'
+vegan_substitutes['char'] = 'tofu'
+vegan_substitutes['cod'] = 'tofu'
+vegan_substitutes['flounder'] = 'tofu'
+vegan_substitutes['haddock'] = 'tofu'
+vegan_substitutes['herring'] = 'tofu'
+vegan_substitutes['octopus'] = 'tofu'
+vegan_substitutes['sardine'] = 'tofu'
+vegan_substitutes['tilapia'] = 'tofu'
+vegan_substitutes['trout'] = 'tofu'
+vegan_substitutes['red snapper'] = 'tofu'
+vegan_substitutes['salmon'] = 'tofu'
+vegan_substitutes['swordfish'] = 'tofu'
+vegan_substitutes['tilapia'] = 'tofu'
+vegan_substitutes['tuna'] = 'tofu'
+vegan_substitutes['shark'] = 'tofu'
+vegan_substitutes['scallop'] = 'tofu'
+vegan_substitutes['squid'] = 'tofu'
+
+
 # define vegan to meat substitutes
 
 non_vegan_substitutes = {}
