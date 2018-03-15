@@ -257,7 +257,6 @@ class Recipe:
         return unhealthy_recipe
 
 
-    ###JIMMY DOES THIS
     def change_style(self, style):
         spices = getSpices()
         styles = spices.keys()
@@ -293,7 +292,29 @@ class Recipe:
             transformed_recipe.steps.append(step)
         else:
             stirindex = stirindices[random.randint(0,len(stirindices)-1)]
-            transformed_recipe.steps[stirindex].original_document += " Add in "+spice1+" and "+spice2+" to your personal preference."
+            sentences = transformed_recipe.steps[stirindex].original_document.split('.')
+            if '' in sentences:
+                sentences.remove('')
+            stir = -1
+            flavor = -1
+            for i,sentence in enumerate(sentences):
+                if 'stir' in sentence.lower() or 'simmer' in sentence.lower():
+                    stir = i
+                if 'season' in sentence.lower() or 'flavor' in sentence.lower() or 'rub' in sentence.lower():
+                    flavor = i
+            if flavor != -1:
+                sentences.insert(flavor+1," Add in "+spice1+" and "+spice2+" to your personal preference")
+            elif stir != -1:
+                sentences.insert(stir," Add in "+spice1+" and "+spice2+" to your personal preference")
+            for i in range(0,len(sentences)):
+                try:
+                    while ' ' == sentences[i][0]:
+                        sentences[i] = sentences[i][1:]
+                    while ' ' == sentences[i][-1]:
+                        sentences[i] = sentences[i][:-1]
+                except:
+                    pass
+            transformed_recipe.steps[stirindex].original_document = '. '.join(sentences)+'.'
             transformed_recipe.steps[stirindex].ingredients += [ingredient1,ingredient2]
         transformed_recipe.name = fixedStyle+" "+transformed_recipe.name
         
