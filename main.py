@@ -4,7 +4,7 @@ from recipe_transformer import make_recipe
 def usage():
     print "python main.py url"
 
-def main(url="https://www.allrecipes.com/recipe/8722/mexican-chicken-i/",make_vegan=False,make_non_vegan=False,make_healthy=False,make_unhealthy=False,change_style=False,style="asian",DIY_to_easy=False,change_cooking_method=False,method=("heat","fry")):
+def main(url="https://www.allrecipes.com/recipe/17837/four-seasons-enchiladas/",make_vegan=False,make_non_vegan=False,make_healthy=False,make_unhealthy=False,change_style=False,style="asian",DIY_to_easy=False,change_cooking_method=False,method=("heat","fry")):
     recipe = make_recipe(url)
     
     if make_vegan:
