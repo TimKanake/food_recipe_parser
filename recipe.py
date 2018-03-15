@@ -271,6 +271,8 @@ class Recipe:
         
         spice1 = spices[fixedStyle][random.randint(0,len(spices[fixedStyle])-1)]
         spice2 = spices[fixedStyle][random.randint(0,len(spices[fixedStyle])-1)]
+        while spice1 == spice2:
+            spice2 = spices[fixedStyle][random.randint(0,len(spices[fixedStyle])-1)]
         ingredient1 = Ingredient(spice1, "1", "pinch", [], "")
         ingredient2 = Ingredient(spice2, "2", "pinch", [], "")
         transformed_recipe.ingredients.append(ingredient1)
