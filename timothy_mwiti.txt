@@ -1,0 +1,5 @@
+1. Wrote make vegan/non-vegan , make healthy/unhealthy functions.
+2. Wrote dictionaries to handle the transformations above. Also created a reduction_substitutes class for ingredients for replacing ingredients by reducing their quantity.
+3. Wrote functions in ingredients_substitutes.py to help with restructuring steps once transformations are done. Other functions also handled quantity conversions.
+4. Helped Jimmy with some of the optional transformations (changing cuisine to cajun and asian, also initial draft of DIY. Some of what we worked on was abandoned before final presentation for a better approach.)
+5. Restructured steps class to hold ingredient object in their ingredients property to help propagate the effect of transformations downwards.
