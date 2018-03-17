@@ -1,0 +1,3 @@
+My main contributions began by parsing the recipe from the URL. This included parsing ingredients, parsing  methods, and parsing tools. Andre and I worked jointly to parse steps. In order to parse ingredients, tools, methods, and steps, I also scraped/created knowledge bases. This resulted in a csv with over 1100 different foods on demand and functions to get lists of tools, methods, or spices.
+
+After Andre and I finished a system for retrieving the recipe and parsing all the information within it, we moved to help Tim and Jimmy on the transformations. This ended up with me contributing a lot to DIY_to_easy and change_style.
