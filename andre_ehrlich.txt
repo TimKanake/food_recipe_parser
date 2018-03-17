@@ -1,0 +1,1 @@
+Scraped recipes and vocabulary with Dan, and parsed the ingredient list into quantity, measure, descriptor, preparation. Parsed steps into Step object, including determining time for each step. I worked with Dan and Tim to figure out the "furniture-chair-armchair" crux of parsing ingredients for better transformations. I also worked on print functions for output.
