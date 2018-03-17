@@ -1,0 +1,6 @@
+Starter Code, Template for Object Oriented approach to building our system.
+Set up Git Repo
+Worked W/ Tim on the make_vegan
+Worked on the extra-credit functions: change style, change method, DIY to easy.
+Worked on diagrams for our presentation.
+Worked on some of the system input/outputs.
